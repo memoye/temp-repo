@@ -9,10 +9,19 @@ type Props = {
 };
 
 export function SessionExpiryHandler({ initialSession }: Props) {
-  const { data: session, status, update } = useSession();
+  const router = useRouter();
+  const {
+    data: session,
+    status,
+    update,
+  } = useSession({
+    required: false,
+    onUnauthenticated() {
+      router.push("/login");
+    },
+  });
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   // 🔁 Proactive silent refresh
   useEffect(() => {

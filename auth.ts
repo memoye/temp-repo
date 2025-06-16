@@ -37,6 +37,10 @@ export const authConfig = {
     maxAge: 1 * 60 * 60,
   },
   callbacks: {
+    async authorized({ auth }) {
+      return !!auth;
+    },
+
     async jwt({ token, account }) {
       const now = Math.floor(Date.now() / 1000);
 

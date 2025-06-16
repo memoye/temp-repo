@@ -1,15 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { LoginButton } from "@/app/_components/login-button";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
-export default async function LoginPage() {
-  const session = await auth();
+export default function LoginPage() {
+  const { data, status } = useSession();
 
-  if (session) {
+  if (data?.user && status === "authenticated") {
     redirect("/dashboard");
   }
 

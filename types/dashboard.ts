@@ -1,5 +1,4 @@
 export type StatTrend = "up" | "down" | "neutral";
-
 export interface QuickStat {
   id: string;
   label: string;

@@ -119,32 +119,6 @@ export default async function DashboardPage() {
         {/* Quick Stats */}
         <QuickStats initialData={quickStats} />
 
-        {/* <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {quickStats.map((stat, index) => {
-            const TrendIcon = getTrendIcon(stat.trend);
-            const trendColorClass = getTrendColor(stat.trend);
-            const changeText = formatChange(stat.change, stat.trend);
-
-            return (
-              <div key={index} className="rounded-lg border bg-background p-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-accent-foreground">{stat.label}</p>
-                    <p className="mt-1 text-2xl font-bold text-foreground">{stat.value}</p>
-                    <div className={`mt-1 flex items-center text-sm ${trendColorClass}`}>
-                      <TrendIcon className="mr-1 h-4 w-4" />
-                      <span className="font-medium">{changeText}</span>
-                    </div>
-                  </div>
-                  <div className={`${stat.color} rounded-lg p-3`}>
-                    <stat.icon className="h-6 w-6 text-background" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div> */}
-
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Main Content - 2/3 width */}
           <div className="space-y-6 lg:col-span-2">
@@ -231,30 +205,6 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Recent Activity */}
-            <div className="rounded-lg border bg-background shadow-sm">
-              <div className="border-b p-6">
-                <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
-              </div>
-              <div className="space-y-4 p-6">
-                {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex space-x-3">
-                    <div className="mt-2 size-2 rounded-full bg-primary"></div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-foreground">{activity.action}</p>
-                      <p className="text-sm text-accent-foreground">{activity.details}</p>
-                      <p className="mt-1 text-xs text-accent-foreground">{activity.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t p-6">
-                <button className="flex items-center text-sm font-medium text-primary hover:text-primary">
-                  View All Activity <ChevronRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
             {/* Quick Actions */}
             <div className="rounded-lg border bg-background shadow-sm">
               <div className="border-b p-6">
@@ -329,12 +279,38 @@ export default async function DashboardPage() {
               </div>
             </div>
 
+            {/* Recent Activity */}
+            <div className="rounded-lg border bg-background shadow-sm">
+              <div className="border-b p-6">
+                <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
+              </div>
+              <div className="space-y-4 p-6">
+                {recentActivity.map((activity, index) => (
+                  <div key={index} className="flex space-x-3">
+                    <div className="mt-2 size-2 rounded-full bg-primary"></div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground">{activity.action}</p>
+                      <p className="text-sm text-accent-foreground">{activity.details}</p>
+                      <p className="mt-1 text-xs text-accent-foreground">{activity.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t p-6">
+                <button className="flex items-center text-sm font-medium text-primary hover:text-primary">
+                  View All Activity <ChevronRight className="ml-1 h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
             {/* Today's Schedule */}
             <div className="rounded-lg border bg-background shadow-sm">
               <div className="border-b p-6">
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-5 w-5 text-primary" />
-                  <h2 className="text-lg font-semibold text-foreground">Today's Schedule</h2>
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Today&apos;s Schedule
+                  </h2>
                 </div>
               </div>
               <div className="space-y-4 p-6">

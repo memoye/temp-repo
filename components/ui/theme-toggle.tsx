@@ -56,7 +56,7 @@ export function ThemeToggle({ variant, className, children }: ThemeToggleProps) 
   };
 
   return (
-    <div className={className}>
+    <div className={className} suppressHydrationWarning>
       <button
         type="button"
         onClick={handleToggle}

@@ -18,6 +18,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function NavMain({
@@ -35,6 +36,7 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
 
   return (
@@ -90,6 +92,9 @@ export function NavMain({
                             pathname.startsWith(subItem.url) && "bg-secondary! text-primary!",
                           )}
                           asChild
+                          onClick={() => {
+                            setOpenMobile(false);
+                          }}
                         >
                           <Link href={subItem.url}>{subItem.title}</Link>
                         </SidebarMenuSubButton>
@@ -108,6 +113,9 @@ export function NavMain({
                 )}
                 tooltip={item.title}
                 asChild
+                onClick={() => {
+                  setOpenMobile(false);
+                }}
               >
                 <Link href={item.url!}>
                   {item.icon && <item.icon />}

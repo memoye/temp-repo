@@ -1,7 +1,7 @@
-// import type { TCustomFieldType } from "@/lib/utils";
+import { z } from "zod";
 import type { Country as CountryCode } from "react-phone-number-input";
-import { ValueUnion } from "./utils";
-import { CustomCaseFieldTypes } from "@/lib/enums";
+import type { ValueUnion } from "./utils";
+import type { CustomCaseFieldTypes } from "@/lib/enums";
 
 export interface ApiResponse<T = unknown> {
   payload: T;
@@ -96,3 +96,11 @@ export interface ICustomFieldLookupItem extends ILookupItem {
   fieldType: ValueUnion<typeof CustomCaseFieldTypes>;
   options: Array<ILookupItem & { description: string }>;
 }
+
+export type FormStep = {
+  id: string;
+  label: string;
+  description: string;
+  schema: z.ZodObject<any>;
+  component: React.ComponentType<{ control: any; watch: any }>;
+};
