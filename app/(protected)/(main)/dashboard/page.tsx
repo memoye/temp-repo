@@ -14,6 +14,11 @@ import {
 import { QuickStats } from "./_components/quick-stats";
 import { QuickStat } from "@/types/dashboard";
 import { formatCurrency } from "@/lib/utils";
+import { PageWrapper } from "@/app/_components/page-wrapper";
+import { PageHeader } from "@/app/_components/page-header";
+import { ChartBarInteractive } from "./_components/interactive-bar-chart";
+import { ChartPieDonutText } from "./_components/donut-pie-chart";
+import { ChartLineDefault } from "./_components/line-chart";
 
 const quickStats = [
   { id: "cases", label: "Active Cases", value: 34, change: "+12%", trend: "up" },
@@ -101,13 +106,18 @@ export default async function DashboardPage() {
   const session = await auth();
 
   return (
-    <main className="space-y-6">
-      <section className="space-y-2">
-        <h1 className="text-xl font-bold">
-          Hi, {session?.user?.given_name} {session?.user?.family_name}! 👋
-        </h1>
+    <PageWrapper className="py-4">
+      <PageHeader
+        // className="sticky top-3 z-50"  // <-- idea for later
+        title="Dashboard"
+      />
 
-        <p className="text-foreground-light font-medium">
+      <section className="space-y-2">
+        <h2 className="text-xl font-bold">
+          Hi, {session?.user?.given_name} {session?.user?.family_name}! 👋
+        </h2>
+
+        <p className="font-medium text-accent-foreground">
           {/* {session?.user?.Tenant.endsWith("s") ? `${user_info?.Tenant}'` : `${user_info?.Tenant}'s`}{" "} */}
           {/* Chronica Workspace. */}
           Welcome to Chronica! Designed to transform the way you manage your law firm.
@@ -119,9 +129,16 @@ export default async function DashboardPage() {
         {/* Quick Stats */}
         <QuickStats initialData={quickStats} />
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 @5xl/main:grid-cols-3">
           {/* Main Content - 2/3 width */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-6 @5xl/main:col-span-2">
+            {/*  Charts  */}
+            <ChartBarInteractive />
+            <div className="grid gap-6 @4xl/main:grid-cols-2">
+              <ChartPieDonutText />
+              <ChartLineDefault />
+            </div>
+
             {/* Recent Cases */}
             <div className="rounded-lg border bg-background shadow-sm">
               <div className="border-b p-6">
@@ -129,10 +146,10 @@ export default async function DashboardPage() {
                   <h2 className="text-lg font-semibold text-foreground">Recent Cases</h2>
                   <div className="flex space-x-2">
                     <button className="p-2 text-accent-foreground hover:text-foreground">
-                      <FilterIcon className="h-4 w-4" />
+                      <FilterIcon className="size-4" />
                     </button>
                     <button className="flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-background hover:bg-primary">
-                      <PlusIcon className="mr-1 h-4 w-4" />
+                      <PlusIcon className="mr-1 size-4" />
                       New Case
                     </button>
                   </div>
@@ -200,7 +217,7 @@ export default async function DashboardPage() {
               </div>
               <div className="border-t p-6">
                 <button className="flex items-center text-sm font-medium text-primary hover:text-primary">
-                  View All Cases <ChevronRight className="ml-1 h-4 w-4" />
+                  View All Cases <ChevronRight className="ml-1 size-4" />
                 </button>
               </div>
             </div>
@@ -274,7 +291,7 @@ export default async function DashboardPage() {
               </div>
               <div className="border-t p-6">
                 <button className="flex items-center text-sm font-medium text-primary/90 hover:text-primary">
-                  View All Deadlines <ChevronRight className="ml-1 h-4 w-4" />
+                  View All Deadlines <ChevronRight className="ml-1 size-4" />
                 </button>
               </div>
             </div>
@@ -298,7 +315,7 @@ export default async function DashboardPage() {
               </div>
               <div className="border-t p-6">
                 <button className="flex items-center text-sm font-medium text-primary hover:text-primary">
-                  View All Activity <ChevronRight className="ml-1 h-4 w-4" />
+                  View All Activity <ChevronRight className="ml-1 size-4" />
                 </button>
               </div>
             </div>
@@ -345,6 +362,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-    </main>
+    </PageWrapper>
   );
 }

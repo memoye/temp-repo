@@ -1,7 +1,14 @@
 {
   "printWidth": 95,
   "tailwindFunctions": ["cva", "cn"],
-  "tailwindAttributes": ["customClasses", "classNames", "styles"],
+  "tailwindAttributes": [
+    "customClasses",
+    "classNames",
+    "styles",
+    "placeholderClassName",
+    "editorTheme",
+    "contentEditableClassName"
+  ],
   "tailwindStylesheet": "./app/globals.css",
   "plugins": ["prettier-plugin-tailwindcss"]
 }

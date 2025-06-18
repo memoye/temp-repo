@@ -30,6 +30,7 @@ function MobileNav() {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button
+          type="button"
           variant="ghost"
           className="mr-1 -ml-2 size-8 px-0 py-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
@@ -99,7 +100,7 @@ function MobileNav() {
               </Link>
             ) : (
               <>
-                <Button asChild>
+                <Button type="button" asChild>
                   <Link href="/onboarding">Get Started</Link>
                 </Button>
 

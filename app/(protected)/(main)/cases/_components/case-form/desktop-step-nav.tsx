@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import type { FormStep } from "@/types/common";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2Icon, CircleIcon } from "lucide-react";
 
 export function DesktopStepNavigation({
   steps,
@@ -18,33 +19,35 @@ export function DesktopStepNavigation({
 
         return (
           <div key={step.id} className="flex items-start gap-3">
-            <div className="flex flex-col items-center pt-1">
+            <div className="flex flex-col items-center pt-1.5">
               {isCompleted ? (
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-              ) : isCurrent ? (
-                <div className="h-5 w-5 rounded-full bg-primary" />
+                <CheckCircle2Icon className="size-4 text-primary" />
               ) : (
-                <Circle className="h-5 w-5 text-muted-foreground" />
+                <CircleIcon
+                  className={cn(
+                    "size-4",
+                    isCurrent ? "fill-primary text-primary" : "text-accent-foreground",
+                  )}
+                />
               )}
               {index < steps.length - 1 && (
-                <div className={`h-8 w-0.5 ${isCompleted ? "bg-green-500" : "bg-muted"}`} />
+                <div
+                  className={`mt-0.5 mr-px h-8 w-px ${isCompleted ? "bg-primary" : "bg-accent-foreground"}`}
+                />
               )}
             </div>
             <div className="space-y-1">
               <button
                 type="button"
                 onClick={() => onStepClick(step.id)}
-                className={`text-left text-sm font-medium ${
-                  isCurrent
-                    ? "text-primary"
-                    : isCompleted
-                      ? "text-green-600"
-                      : "text-muted-foreground"
-                }`}
+                className={cn(
+                  "text-left text-sm font-medium",
+                  isCompleted || isCurrent ? "text-primary" : "text-accent-foreground",
+                )}
               >
                 {step.label}
               </button>
-              <p className="text-xs text-muted-foreground">{step.description}</p>
+              <p className="text-xs text-accent-foreground">{step.description}</p>
             </div>
           </div>
         );

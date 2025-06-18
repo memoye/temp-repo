@@ -1,45 +1,129 @@
 import { z } from "zod";
+import { capitalize } from "@/lib/utils";
+import { CaseStatuses, CustomCaseFieldTypes, PermissionUserTypes } from "@/lib/enums";
+import type { ValueUnion } from "@/types/utils";
+import { richTextFieldSchemaFactory } from "./common";
 
-export const caseBasicInfoSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  caseNumber: z.string().min(1, "Case number is required"),
-  jurisdiction: z.string().min(1, "Jurisdiction is required"),
-  caseType: z.enum(["civil", "criminal", "family", "corporate", "other"]),
+export const getUserSchema = (as?: string, message?: string) => {
+  const field = as ? capitalize(as) : "User";
+
+  return z.object(
+    {
+      name: z.string().min(1, { message: `${field} Name is required` }),
+      email: z.string().email({ message: `${field} Email is invalid` }),
+      phoneNumber: z.string().min(1, { message: `${field} Phone Number is required` }),
+      dialCode: z.string().min(1, { message: `${field} Dial Code is required` }),
+      contactId: z.string().min(1, { message: `Select ${as ?? ""} from list or create new` }),
+      relationship: z.string().min(0, { message: `${field} Relationship is required` }),
+      contactType: z
+        .number()
+        // .refine(
+        //   (value) =>
+        //     Object.values(ContactTypes).includes(value as TContactType),
+        //   { message: "Select 'Individual' or 'Organization'" },
+        // )
+        .nullable()
+        .optional(),
+    },
+    {
+      message,
+      invalid_type_error: "Select Individual or Organization",
+    },
+  );
+};
+
+export const customFieldOptionSchema = z.object({
+  id: z.number().int(),
+  name: z.string().optional(),
+  value: z.any(),
+  description: z.string().optional(),
 });
 
-export const partiesSchema = z.object({
-  plaintiff: z.string().min(1, "Plaintiff is required"),
-  defendant: z.string().min(1, "Defendant is required"),
-  attorneys: z.array(
-    z.object({
-      name: z.string().min(1, "Name is required"),
-      role: z.string().min(1, "Role is required"),
-      contact: z.string().email("Invalid email").optional(),
-    }),
-  ),
+export const customFieldSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  description: z.string(),
+  value: z.any(),
+  fieldType: z
+    .number()
+    .refine(
+      (value) =>
+        Object.values(CustomCaseFieldTypes).includes(
+          value as ValueUnion<typeof CustomCaseFieldTypes>,
+        ),
+      { message: "Select field type" },
+    ),
+  options: z.array(customFieldOptionSchema).nullable(),
 });
 
-export const caseDetailsSchema = z.object({
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  filingDate: z.date(),
-  status: z.enum(["open", "closed", "pending", "appealed"]),
-  priority: z.enum(["low", "medium", "high", "critical"]),
-});
-
-export const documentsSchema = z.object({
-  documents: z.array(
-    z.object({
-      name: z.string().min(1, "Document name is required"),
-      type: z.string().min(1, "Document type is required"),
-      file: z.any().optional(), // This would be more specific in a real implementation
-    }),
-  ),
+export const generalInfoSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  description: z.string(),
+  client: getUserSchema("client", "Select client"),
+  fileNumber: z.string().optional(),
+  firmId: z.string({ message: "Firm ID not found" }),
+  status: z
+    .number()
+    .refine(
+      (value) =>
+        Object.values(CaseStatuses).includes(value as ValueUnion<typeof CaseStatuses>),
+      { message: "Select status from the list" },
+    )
+    .optional(),
+  state: z.object({
+    id: z.number().min(1, { message: "Select a state" }),
+    name: z.string(),
+  }),
+  courtId: z.number().min(1, { message: "Select a court" }),
+  originatingLawyers: getUserSchema("solicitor"),
+  responsibleLawyers: z.array(getUserSchema("solicitor").optional()).min(0).optional(),
+  documentFolder: z.object({
+    name: z.string().min(1, "Please enter folder name."),
+    categoryId: z.number().min(1, "Please select category.").nullable(),
+  }),
+  practiceArea: z.object({
+    id: z.string().min(1, { message: "Select a practice area" }),
+    name: z.string().min(1, { message: "Select a practice area" }),
+  }),
+  openDate: z.date().nullable().optional(),
+  closedDate: z.date().nullable().optional(),
+  nextCourtDate: z.date().nullable().optional(),
+  permission: z.object({
+    type: z
+      .number({ message: "Select permission type" })
+      .min(1, { message: "Select permission type from options" }),
+    permissions: z
+      .array(
+        z.union([
+          z
+            .object({
+              userType: z
+                .number()
+                .refine(
+                  (value) =>
+                    Object.values(PermissionUserTypes).includes(
+                      value as ValueUnion<typeof PermissionUserTypes>,
+                    ),
+                  { message: "Select permission user type" },
+                )
+                .optional(),
+              value: z.string(),
+            })
+            .optional(),
+          getUserSchema("user").optional(),
+        ]),
+      )
+      .optional(),
+  }),
+  // isBillable: z.boolean({ required_error: "Specify if case is billable" }),
+  // sendInvoiceToAll: z.boolean({ required_error: "Specify if invoice should be sent to all" }),
 });
 
 // Combine all schemas
 export const caseFormSchema = z.object({
-  basicInfo: caseBasicInfoSchema,
-  parties: partiesSchema,
-  details: caseDetailsSchema,
-  documents: documentsSchema,
+  generalInfo: generalInfoSchema,
+  // basicInfo: caseBasicInfoSchema,
+  // parties: partiesSchema,
+  // details: caseDetailsSchema,
+  // documents: documentsSchema,
 });

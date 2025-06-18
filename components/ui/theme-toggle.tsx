@@ -23,7 +23,12 @@ export function ThemeToggle({ variant, className, children }: ThemeToggleProps) 
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size={children ? "default" : "icon"} className={className}>
+          <Button
+            type="button"
+            variant="outline"
+            size={children ? "default" : "icon"}
+            className={className}
+          >
             {theme === "light" && <SunIcon size={12} className="animate-in fade-in-0" />}
             {theme === "dark" && <MoonIcon size={12} className="animate-in fade-in" />}
             {theme === "system" && <LaptopIcon size={12} className="animate-in fade-in" />}

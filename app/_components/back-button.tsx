@@ -6,11 +6,13 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 interface BackButtonProps extends VariantProps<typeof buttonVariants> {
   fallback?: string;
   className?: string;
   children?: React.ReactNode;
+  title?: string;
 }
 
 export function BackButton({
@@ -19,6 +21,7 @@ export function BackButton({
   variant = "outline",
   size = "default",
   children,
+  title,
 }: BackButtonProps) {
   const router = useRouter();
   const { data: session } = useSession();
@@ -55,8 +58,14 @@ export function BackButton({
   };
 
   return (
-    <Button variant={variant} size={size} onClick={handleBack} className={className}>
-      <ArrowLeft className="mr-2 size-4" />
+    <Button
+      variant={variant}
+      size={size}
+      onClick={handleBack}
+      className={cn("cursor-pointer text-accent-foreground hover:text-foreground", className)}
+      title={title}
+    >
+      <ArrowLeft className="size-4" />
       {children || "Back"}
     </Button>
   );

@@ -1,61 +1,77 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm, FormProvider } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { caseFormSchema } from "@/schemas/case-form";
-import { Button } from "@/components/ui/button";
-import type { CaseFormValues } from "@/types/cases";
-import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { InfoIcon, Save, Trash2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState, useCallback } from "react";
 import { isEqual } from "@/lib/utils";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import { InfoIcon } from "lucide-react";
+import { PageWrapper } from "@/app/_components/page-wrapper";
 import { BackButton } from "@/app/_components/back-button";
-import { formSteps } from "../_components/case-form/steps-config";
+import { PageHeader } from "@/app/_components/page-header";
 import { DesktopStepNavigation } from "../_components/case-form/desktop-step-nav";
 import { MobileStepNavigation } from "../_components/case-form/mobile-step-nav";
-import { PageHeader } from "@/app/_components/page-header";
+import { formSteps } from "../_components/case-form/steps-config";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import type { CaseFormValues } from "@/types/cases";
 
 const PERSISTENCE_KEY = "draft-case-form";
 
+const defaultUser = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  dialCode: "",
+  contactId: "",
+  relationship: "",
+  contactType: 1,
+};
+
 const initialValues: CaseFormValues = {
-  basicInfo: {
-    title: "",
-    caseNumber: "",
-    jurisdiction: "",
-    caseType: "other",
-  },
-  parties: {
-    plaintiff: "",
-    defendant: "",
-    attorneys: [],
-  },
-  details: {
+  generalInfo: {
+    client: defaultUser,
+    courtId: 0,
     description: "",
-    filingDate: new Date(),
-    status: "open",
-    priority: "medium",
-  },
-  documents: {
-    documents: [],
+    documentFolder: {
+      categoryId: 0,
+      name: "",
+    },
+    firmId: "",
+    name: "",
+    practiceArea: {
+      id: "",
+      name: "",
+    },
+    openDate: null,
+    closedDate: null,
+    nextCourtDate: null,
+    originatingLawyers: defaultUser,
+    permission: {
+      type: 0,
+      permissions: [
+        {
+          value: "",
+          userType: 0,
+        },
+      ],
+    },
+    state: {
+      id: 0,
+      name: "",
+    },
+    fileNumber: "",
+    responsibleLawyers: [],
+    status: 1,
   },
 };
 
-export default function NewCaseForm() {
+export default function NewCasePage() {
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -70,7 +86,7 @@ export default function NewCaseForm() {
   const currentStep = currentStepIndex >= 0 ? formSteps[currentStepIndex] : formSteps[0];
 
   const [showDraftAlert, setShowDraftAlert] = useState(false);
-  const [, setHasDraftData] = useState(false);
+
   const [lastSavedData, setLastSavedData] = useState<CaseFormValues | null>(null);
 
   const form = useForm<CaseFormValues>({
@@ -87,23 +103,23 @@ export default function NewCaseForm() {
     return session?.user?.id ? `${PERSISTENCE_KEY}-${session.user.id}` : null;
   }, [session?.user?.id]);
 
-  const saveDraft = useCallback(() => {
-    const draftKey = getDraftKey();
-    if (!draftKey) return;
+  // const saveDraft = useCallback(() => {
+  //   const draftKey = getDraftKey();
+  //   if (!draftKey) return;
 
-    localStorage.setItem(draftKey, JSON.stringify(formData));
-    setLastSavedData(formData);
-    showSuccessToast("Draft saved", {
-      description: "Your progress has been saved to this device.",
-    });
-  }, [formData, getDraftKey]);
+  //   localStorage.setItem(draftKey, JSON.stringify(formData));
+  //   setLastSavedData(formData);
+  //   showSuccessToast("Draft saved", {
+  //     description: "Your progress has been saved to this device.",
+  //   });
+  // }, [formData, getDraftKey]);
 
   const clearDraft = useCallback(() => {
     const draftKey = getDraftKey();
     if (!draftKey) return;
 
     localStorage.removeItem(draftKey);
-    setHasDraftData(false);
+    // setHasDraftData(false);
     setLastSavedData(null);
     setShowDraftAlert(false);
   }, [getDraftKey]);
@@ -118,10 +134,10 @@ export default function NewCaseForm() {
     // Keep the loaded draft data
   }, []);
 
-  const handleDiscardAndExit = useCallback(() => {
-    clearDraft();
-    // The BackButton component will handle navigation
-  }, [clearDraft]);
+  // const handleDiscardAndExit = useCallback(() => {
+  //   clearDraft();
+  //   // The BackButton component will handle navigation
+  // }, [clearDraft]);
 
   // Auto-save logic with proper dependency management
   useEffect(() => {
@@ -143,13 +159,13 @@ export default function NewCaseForm() {
         const existingDraft = localStorage.getItem(draftKey);
         if (existingDraft) {
           localStorage.removeItem(draftKey);
-          setHasDraftData(false);
+          // setHasDraftData(false);
           setLastSavedData(null);
         }
       } else if (!isUnchanged) {
         // Save draft if there are changes
         localStorage.setItem(draftKey, JSON.stringify(formData));
-        setHasDraftData(true);
+        // setHasDraftData(true);
         setLastSavedData(formData);
       }
     }, 500);
@@ -165,10 +181,11 @@ export default function NewCaseForm() {
       if (!draftKey) return;
 
       const draftData = localStorage.getItem(draftKey);
-      if (draftData) {
+      // console.log({ initialValues, draftData: JSON.parse(draftData) });
+      if (draftData && !isEqual(initialValues, JSON.parse(draftData))) {
         try {
           const parsedData = JSON.parse(draftData);
-          setHasDraftData(true);
+          // setHasDraftData(true);
           setLastSavedData(parsedData);
           setShowDraftAlert(true);
           reset(parsedData);
@@ -247,117 +264,100 @@ export default function NewCaseForm() {
   };
 
   return (
-    <FormProvider {...form}>
-      <BackButton fallback="/cases" className="w-fit" />
+    <div className="relative flex">
+      {/* Sticky Sidebar Navigation (Desktop) */}
+      <div className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 space-y-6 border-r bg-sidebar p-4 py-6 @3xl/main:block">
+        <BackButton fallback="/cases" className="w-fit border-0 px-0! hover:bg-transparent" />
 
-      <PageHeader
-        title="New Case"
-        description="Add a new case to the system"
-        pageActions={
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={saveDraft} disabled={!session?.user?.id}>
-                <Save className="mr-2 h-4 w-4" />
-                Save Draft
-              </Button>
-
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Discard & Exit
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Discard changes?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      All unsaved changes will be lost. This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction variant="destructive" onClick={handleDiscardAndExit}>
-                      Discard
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
+        <div>
+          <div className="mb-4">
+            <h3 className="mb-1 text-sm font-semibold">Steps</h3>
+            <p className="text-xs text-muted-foreground">
+              Fill in required fields to create a new case.
+            </p>
           </div>
-        }
-      />
-      {showDraftAlert && (
-        <Alert className="mb-4 border-l-4 border-warning bg-warning/15">
-          <InfoIcon className="size-4" />
-          <AlertTitle>Draft recovered!</AlertTitle>
-          <AlertDescription className="flex flex-col items-center justify-between gap-4 @[620px]/main:flex-row">
-            <p className="w-full text-sm">You have unsaved changes from a previous session.</p>
 
-            <div className="flex w-full justify-end gap-2 @[620px]/main:w-fit">
-              <Button variant="outline" size="sm" onClick={handleDiscardDraft}>
-                Discard
-              </Button>
-              <Button size="sm" variant="warning" onClick={handleContinueDraft}>
-                Continue
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <div className="flex flex-col @3xl/main:flex-row">
-        {/* Desktop Step Navigation (left sidebar) */}
-        <div className="hidden w-64 border-r p-4 @3xl/main:block">
           <DesktopStepNavigation
             steps={formSteps}
             currentStepId={currentStepId}
             onStepClick={goToStep}
           />
         </div>
-
-        {/* Mobile Step Navigation (accordion) */}
-        <div className="@3xl/main:hidden">
-          <MobileStepNavigation
-            steps={formSteps}
-            currentStepId={currentStepId}
-            onStepClick={goToStep}
-          />
-        </div>
-
-        {/* Form Content */}
-        <div className="flex-1">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold">{currentStep.label}</h2>
-              <p className="text-muted-foreground">{currentStep.description}</p>
-            </div>
-
-            <currentStep.component control={form.control} watch={form.watch} />
-
-            <div className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStepIndex === 0}
-              >
-                Previous
-              </Button>
-
-              {currentStepIndex < formSteps.length - 1 ? (
-                <Button type="button" onClick={nextStep}>
-                  Next
-                </Button>
-              ) : (
-                <Button type="submit" disabled={!isValid || mutation.isPending}>
-                  {mutation.isPending ? "Submitting..." : "Submit Case"}
-                </Button>
-              )}
-            </div>
-          </form>
-        </div>
       </div>
-    </FormProvider>
+
+      {/* Main Content Area */}
+      <PageWrapper className="flex-1 py-4 @3xl/main:max-w-3xl">
+        <Form {...form}>
+          <PageHeader
+            className="h-"
+            title="New Case"
+            description="Add a new case to the system"
+          />
+
+          {showDraftAlert && (
+            <Alert className="mb-4 border-l-4 border-warning bg-warning/15">
+              <InfoIcon className="size-4" />
+              <AlertTitle>Draft recovered!</AlertTitle>
+              <AlertDescription className="flex flex-col items-center justify-between gap-4 @[620px]/main:flex-row">
+                <p className="w-full text-sm">
+                  You have unsaved changes from a previous session.
+                </p>
+
+                <div className="flex w-full justify-end gap-2 @[620px]/main:w-fit">
+                  <Button variant="outline" size="sm" onClick={handleDiscardDraft}>
+                    Discard
+                  </Button>
+                  <Button size="sm" variant="warning" onClick={handleContinueDraft}>
+                    Continue
+                  </Button>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Mobile Step Navigation */}
+          <div className="@3xl/main:hidden">
+            <MobileStepNavigation
+              steps={formSteps}
+              currentStepId={currentStepId}
+              onStepClick={goToStep}
+            />
+          </div>
+
+          {/* Form Content */}
+          <div className="flex-1">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+              <div>
+                <h2 className="mb-1 text-lg font-bold">{currentStep.label}</h2>
+                <p className="text-xs text-accent-foreground">{currentStep.description}</p>
+              </div>
+
+              <currentStep.component control={form.control} watch={form.watch} />
+
+              <div className="flex justify-between">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={prevStep}
+                  disabled={currentStepIndex === 0}
+                >
+                  Previous
+                </Button>
+
+                {currentStepIndex < formSteps.length - 1 ? (
+                  <Button type="button" onClick={nextStep}>
+                    Next
+                  </Button>
+                ) : (
+                  <Button type="submit" disabled={!isValid || mutation.isPending}>
+                    {mutation.isPending ? "Submitting..." : "Submit Case"}
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
+        </Form>
+      </PageWrapper>
+    </div>
   );
 }

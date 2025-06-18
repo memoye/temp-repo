@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { Country as CountryCode } from "react-phone-number-input";
 import type { ValueUnion } from "./utils";
 import type { CustomCaseFieldTypes } from "@/lib/enums";
+import { Control, FieldValue, FieldValues } from "react-hook-form";
 
 export interface ApiResponse<T = unknown> {
   payload: T;
@@ -102,5 +103,9 @@ export type FormStep = {
   label: string;
   description: string;
   schema: z.ZodObject<any>;
-  component: React.ComponentType<{ control: any; watch: any }>;
+  component: React.ComponentType<{
+    control: Control<any>;
+    watch: any;
+    className?: string;
+  }>;
 };

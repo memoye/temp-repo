@@ -9,10 +9,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <AppSidebar />
       <SidebarInset>
         <AppHeader />
-        <main className="@container/main flex-1 bg-accent">
-          {/* <MainLayoutAlerts /> */}
-          <div className="flex flex-col gap-4 px-4 py-6 md:px-6">{children}</div>
-        </main>
+        {/* <main className="@container/main flex-1 bg-accent"> */}
+        {/* <MainLayoutAlerts /> */}
+        {/* <div className="flex flex-col gap-4 px-4 py-6 md:px-6">{children}</div> */}
+        {/* </main> */}
+        {children}
       </SidebarInset>
       {/* </AlertsContextProvider> */}
     </SidebarProvider>

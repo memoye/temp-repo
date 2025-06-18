@@ -1,14 +1,20 @@
 import "./globals.css";
 import type { Metadata } from "next";
-// import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Merriweather } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
+  weight: ["300", "400", "700", "900"],
+  subsets: ["latin"],
+});
 
 const satoshi = localFont({
   src: "./fonts/Satoshi-Variable.ttf",
@@ -33,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${satoshi.variable} font-sans antialiased`}>
+      <body
+        className={`${satoshi.variable} ${geistMono.variable} ${merriweather.variable} font-sans antialiased`}
+      >
         <Providers>
           {children}
           <Toaster position="top-right" visibleToasts={3} />

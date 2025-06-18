@@ -57,6 +57,7 @@ export function SiteHeader() {
                   <>
                     {pathname !== "/login" && (
                       <Button
+                        type="button"
                         variant="ghost"
                         className="h-8 px-2 font-semibold text-primary hover:!bg-transparent hover:!text-primary"
                         asChild
@@ -65,7 +66,7 @@ export function SiteHeader() {
                       </Button>
                     )}
 
-                    <Button className="h-10">
+                    <Button type="button" className="h-10">
                       <Link href="/onboarding">Get Started</Link>
                     </Button>
                   </>
