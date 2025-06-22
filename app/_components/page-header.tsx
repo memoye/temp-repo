@@ -19,7 +19,7 @@ export const PageHeader = ({
   return (
     <div
       className={cn(
-        "mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:gap-6",
+        "mb-6 flex flex-col items-start justify-between gap-4 text-accent-foreground @2xl/main:flex-row @2xl/main:items-center @2xl/main:gap-6",
         className,
       )}
     >

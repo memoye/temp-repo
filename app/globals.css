@@ -6,6 +6,7 @@
 @theme inline {
   --font-sans: var(--font-satoshi);
   --font-serif: var(--font-merriweather);
+  --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -14,7 +15,6 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
-
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
@@ -30,10 +30,10 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted-foreground: var(--muted-foreground);
   --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
@@ -65,7 +65,7 @@
   --warning: oklch(0.8187 0.1699 78.79);
   --success: oklch(0.6328 0.1335 154.31);
   --destructive: oklch(0.5824 0.2325 30.06);
-  --border: oklch(0.9689 0.0025 228.78);
+  --border: oklch(0.93 0.0058 264.53);
   --input: oklch(0.8708 0.0157 222.7);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);

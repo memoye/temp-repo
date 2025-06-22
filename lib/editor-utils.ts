@@ -1,6 +1,7 @@
 import type { ElementNode, RangeSelection, TextNode } from "lexical";
 import type { SerializedDocument } from "@lexical/file";
 import { $isAtNodeEnd } from "@lexical/selection";
+import { $isListItemNode, $isListNode, type ListItemNode } from "@lexical/list";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function* generateReader<T = any>(reader: ReadableStreamDefaultReader<T>) {
@@ -198,4 +199,19 @@ export function setFloatingElemPositionForLinkEditor(
 
   floatingElem.style.opacity = "1";
   floatingElem.style.transform = `translate(${left}px, ${top}px)`;
+}
+
+export function canIndentListItem(listItem: ListItemNode) {
+  const previousSibling = listItem.getPreviousSibling();
+  return previousSibling !== null && $isListItemNode(previousSibling);
+}
+
+export function canOutdentListItem(listItem: ListItemNode) {
+  const parentList = listItem.getParent();
+  if (!$isListNode(parentList)) {
+    return false;
+  }
+
+  const grandparent = parentList.getParent();
+  return grandparent !== null && $isListItemNode(grandparent);
 }

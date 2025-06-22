@@ -15,11 +15,11 @@ import { BackButton } from "@/app/_components/back-button";
 import { PageHeader } from "@/app/_components/page-header";
 import { DesktopStepNavigation } from "../_components/case-form/desktop-step-nav";
 import { MobileStepNavigation } from "../_components/case-form/mobile-step-nav";
-import { formSteps } from "../_components/case-form/steps-config";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import type { CaseFormValues } from "@/types/cases";
+import { newCaseSteps } from "@/config/new-case-steps";
 
 const PERSISTENCE_KEY = "draft-case-form";
 
@@ -69,6 +69,7 @@ const initialValues: CaseFormValues = {
     responsibleLawyers: [],
     status: 1,
   },
+  relatedContacts: [],
 };
 
 export default function NewCasePage() {
@@ -80,10 +81,10 @@ export default function NewCasePage() {
     },
   });
   const searchParams = useSearchParams();
-  const currentStepId = searchParams.get("step") || formSteps[0].id;
+  const currentStepId = searchParams.get("step") || newCaseSteps[0].id;
 
-  const currentStepIndex = formSteps.findIndex((step) => step.id === currentStepId);
-  const currentStep = currentStepIndex >= 0 ? formSteps[currentStepIndex] : formSteps[0];
+  const currentStepIndex = newCaseSteps.findIndex((step) => step.id === currentStepId);
+  const currentStep = currentStepIndex >= 0 ? newCaseSteps[currentStepIndex] : newCaseSteps[0];
 
   const [showDraftAlert, setShowDraftAlert] = useState(false);
 
@@ -231,8 +232,8 @@ export default function NewCasePage() {
 
   const goToStep = async (stepId: string) => {
     // Validate current step before navigating
-    const stepField = stepId.split(".")[0];
-    const isValid = await trigger(stepField as any);
+    // const stepField = stepId.split(".")[0];
+    const isValid = true; // await trigger(stepField as any);
 
     if (isValid) {
       router.push(`/cases/new?step=${stepId}`);
@@ -243,8 +244,8 @@ export default function NewCasePage() {
     // Trigger validation for the current step's fields
     const isValid = await form.trigger(currentStep.id as any);
 
-    if (isValid && currentStepIndex < formSteps.length - 1) {
-      router.push(`/cases/new?step=${formSteps[currentStepIndex + 1].id}`);
+    if (isValid && currentStepIndex < newCaseSteps.length - 1) {
+      router.push(`/cases/new?step=${newCaseSteps[currentStepIndex + 1].id}`);
     } else if (!isValid) {
       // Scroll to the first error if validation fails
       const firstError = Object.keys(form.formState.errors)[0];
@@ -259,14 +260,14 @@ export default function NewCasePage() {
 
   const prevStep = () => {
     if (currentStepIndex > 0) {
-      goToStep(formSteps[currentStepIndex - 1].id);
+      goToStep(newCaseSteps[currentStepIndex - 1].id);
     }
   };
 
   return (
     <div className="relative flex">
       {/* Sticky Sidebar Navigation (Desktop) */}
-      <div className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 space-y-6 border-r bg-sidebar p-4 py-6 @3xl/main:block">
+      <div className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 space-y-6 border-r bg-sidebar p-4 py-6 group-has-[[data-collapsible=icon]]/sidebar-wrapper:top-12 group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-[calc(100vh-3rem)] @3xl/main:block">
         <BackButton fallback="/cases" className="w-fit border-0 px-0! hover:bg-transparent" />
 
         <div>
@@ -278,7 +279,7 @@ export default function NewCasePage() {
           </div>
 
           <DesktopStepNavigation
-            steps={formSteps}
+            steps={newCaseSteps}
             currentStepId={currentStepId}
             onStepClick={goToStep}
           />
@@ -288,11 +289,7 @@ export default function NewCasePage() {
       {/* Main Content Area */}
       <PageWrapper className="flex-1 py-4 @3xl/main:max-w-3xl">
         <Form {...form}>
-          <PageHeader
-            className="h-"
-            title="New Case"
-            description="Add a new case to the system"
-          />
+          <PageHeader title="New Case" description="Add a new case to the system" />
 
           {showDraftAlert && (
             <Alert className="mb-4 border-l-4 border-warning bg-warning/15">
@@ -318,18 +315,18 @@ export default function NewCasePage() {
           {/* Mobile Step Navigation */}
           <div className="@3xl/main:hidden">
             <MobileStepNavigation
-              steps={formSteps}
+              steps={newCaseSteps}
               currentStepId={currentStepId}
               onStepClick={goToStep}
             />
           </div>
 
           {/* Form Content */}
-          <div className="flex-1">
+          <div className="flex-1 bg-transparent px-0 @xl/page:rounded-lg @xl/page:bg-card @xl/page:px-4 @xl/page:py-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               <div>
                 <h2 className="mb-1 text-lg font-bold">{currentStep.label}</h2>
-                <p className="text-xs text-accent-foreground">{currentStep.description}</p>
+                <p className="text-sm text-accent-foreground">{currentStep.description}</p>
               </div>
 
               <currentStep.component control={form.control} watch={form.watch} />
@@ -344,7 +341,7 @@ export default function NewCasePage() {
                   Previous
                 </Button>
 
-                {currentStepIndex < formSteps.length - 1 ? (
+                {currentStepIndex < newCaseSteps.length - 1 ? (
                   <Button type="button" onClick={nextStep}>
                     Next
                   </Button>

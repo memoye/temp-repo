@@ -1,5 +1,5 @@
 import type { Session } from "next-auth";
-import type { ITokenResponse } from "../types/common";
+import type { TokenResponse } from "../types/common";
 import { createFetchClient } from "@zayne-labs/callapi";
 import { getSession } from "next-auth/react";
 import { auth } from "../auth";
@@ -15,7 +15,7 @@ async function getGuestToken() {
 
     const response = await fetch(url, { method: "POST" });
     if (!response.ok) throw new Error("Failed to fetch guest token");
-    const data: ITokenResponse = await response.json();
+    const data: TokenResponse = await response.json();
     return data.access_token;
   } catch (error) {
     console.error("Guest token fetch failed:", error);
@@ -39,4 +39,6 @@ export const callBackend = createFetchClient({
       return session?.access_token || guestToken;
     },
   },
+  throwOnError: true,
+  resultMode: "onlySuccessWithException",
 });

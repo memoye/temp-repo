@@ -72,16 +72,23 @@ export const authConfig = {
           }),
         });
 
-        const refreshedTokens = await response.json();
-        if (!response.ok) throw refreshedTokens;
+        try {
+          const text = await response.text();
+          const refreshedTokens = JSON.parse(text);
+          if (!response.ok) throw refreshedTokens;
 
-        return {
-          ...token,
-          access_token: refreshedTokens.access_token,
-          refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
-          id_token: refreshedTokens.id_token ?? token.id_token, // ✅ preserve id_token
-          expires_at: now + refreshedTokens.expires_in,
-        };
+          return {
+            ...token,
+            access_token: refreshedTokens.access_token,
+            refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
+            id_token: refreshedTokens.id_token ?? token.id_token,
+            expires_at: now + refreshedTokens.expires_in,
+          };
+        } catch (err) {
+          console.error("Token refresh error", err);
+          console.error("Raw response:", response);
+          return { ...token, error: "RefreshAccessTokenError" };
+        }
       } catch (err) {
         console.error("Token refresh error", err);
         return { ...token, error: "RefreshAccessTokenError" };

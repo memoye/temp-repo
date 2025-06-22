@@ -119,11 +119,60 @@ export const generalInfoSchema = z.object({
   // sendInvoiceToAll: z.boolean({ required_error: "Specify if invoice should be sent to all" }),
 });
 
+export const contactSchema = z.object({
+  name: z.string().min(1, { message: `Contact Name is required` }),
+  email: z.string().email({ message: `Contact Email is invalid` }),
+  phoneNumber: z.string().min(1, { message: `Contact Phone Number is required` }),
+  dialCode: z.string().min(1, { message: `Contact Dial Code is required` }),
+  contactId: z.string().min(1, { message: `Select from list or create new` }),
+  relationship: z.string().min(0, { message: `Contact Relationship is required` }),
+  contactType: z
+    .number()
+    // .refine(
+    //   (value) =>
+    //     Object.values(ContactTypes).includes(value as TContactType),
+    //   { message: "Select 'Individual' or 'Organization'" },
+    // )
+    .nullable()
+    .optional(),
+});
+
+export const relatedContactsSchema = {
+  relatedContacts: z.array(contactSchema).optional().default([]).optional(),
+};
+
+export const permissionsSchema = z.object({
+  permission: z.object({
+    type: z
+      .number({ message: "Select permission type" })
+      .min(1, { message: "Select permission type from options" }),
+    permissions: z
+      .array(
+        z.union([
+          z
+            .object({
+              userType: z
+                .number()
+                .refine(
+                  (value) => Object.values(PermissionUserTypes).includes(value as any), // as TPermissionUserType),
+                  { message: "Select permission user type" },
+                )
+                .optional(),
+              value: z.string(),
+            })
+            .optional(),
+          getUserSchema("user").optional(),
+        ]),
+      )
+      .optional(),
+  }),
+});
+
 // Combine all schemas
 export const caseFormSchema = z.object({
   generalInfo: generalInfoSchema,
-  // basicInfo: caseBasicInfoSchema,
-  // parties: partiesSchema,
+  relatedContacts: relatedContactsSchema,
+  // permissions: partiesSchema,
   // details: caseDetailsSchema,
   // documents: documentsSchema,
 });

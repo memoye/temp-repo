@@ -1,5 +1,7 @@
 "use client";
 
+import { LoadingDots } from "@/components/ui/loading-dots";
+import { Logo } from "@/components/ui/logo";
 import { useEffect } from "react";
 import { useLoadingBar } from "react-top-loading-bar";
 
@@ -12,5 +14,12 @@ export default function RootLoading() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div className="grid h-dvh w-screen place-items-center">Loading...</div>;
+  return (
+    <div className="grid h-dvh w-screen place-items-center">
+      <div className="grid place-items-center gap-1">
+        <Logo />
+        <LoadingDots className="text-primary" size="md" />
+      </div>
+    </div>
+  );
 }

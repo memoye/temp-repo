@@ -16,9 +16,7 @@ import { Button } from "@/components/ui/button";
 import { BellIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
-// import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { UserActions } from "./user-actions";
-// import { SearchBox } from "../features/search-box";
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 

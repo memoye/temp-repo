@@ -1,8 +1,8 @@
-import * as React from "react";
 import { HexColorPicker } from "react-colorful";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
 import { Input } from "./input";
+import { cn } from "@/lib/utils";
 
 type Props = {
   disabled?: boolean;
@@ -12,6 +12,8 @@ type Props = {
   stopCloseOnClickSelf?: boolean;
   color: string;
   onChange?: (color: string, skipHistoryStack: boolean) => void;
+  className?: string;
+  style?: React.CSSProperties;
 };
 
 export default function ColorPicker({
@@ -21,6 +23,7 @@ export default function ColorPicker({
   onChange,
   icon,
   label,
+  className,
   ...rest
 }: Props) {
   return (
@@ -29,12 +32,11 @@ export default function ColorPicker({
         <Button
           type="button"
           size={"icon"}
-          className="!h-8 !w-8"
+          className={cn("size-8! rounded-sm border-input", className)}
           variant={"outline"}
           {...rest}
         >
-          <span className="size-4 rounded-full">{icon}</span>
-          {/* <ChevronDownIcon className='size-4'/> */}
+          {icon}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
