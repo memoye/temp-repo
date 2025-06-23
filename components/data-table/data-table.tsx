@@ -75,6 +75,7 @@ export function DataTable<TData>({
                           style={{
                             ...getCommonPinningStyles({ column: cell.column }),
                           }}
+                          className={cn(row.getIsSelected() && "bg-secondary!")}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>

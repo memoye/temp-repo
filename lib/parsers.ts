@@ -3,19 +3,15 @@ import { z } from "zod";
 
 import { dataTableConfig } from "@/config/data-table";
 
-import type {
-  ExtendedColumnFilter,
-  ExtendedColumnSort,
-} from "@/types/data-table";
+import type { ExtendedColumnFilter, ExtendedColumnSort } from "@/types/data-table";
+import type { DateRange } from "react-day-picker";
 
 const sortingItemSchema = z.object({
   id: z.string(),
   desc: z.boolean(),
 });
 
-export const getSortingStateParser = <TData>(
-  columnIds?: string[] | Set<string>,
-) => {
+export const getSortingStateParser = <TData>(columnIds?: string[] | Set<string>) => {
   const validKeys = columnIds
     ? columnIds instanceof Set
       ? columnIds
@@ -42,10 +38,7 @@ export const getSortingStateParser = <TData>(
     serialize: (value) => JSON.stringify(value),
     eq: (a, b) =>
       a.length === b.length &&
-      a.every(
-        (item, index) =>
-          item.id === b[index]?.id && item.desc === b[index]?.desc,
-      ),
+      a.every((item, index) => item.id === b[index]?.id && item.desc === b[index]?.desc),
   });
 };
 
@@ -59,9 +52,7 @@ const filterItemSchema = z.object({
 
 export type FilterItemSchema = z.infer<typeof filterItemSchema>;
 
-export const getFiltersStateParser = <TData>(
-  columnIds?: string[] | Set<string>,
-) => {
+export const getFiltersStateParser = <TData>(columnIds?: string[] | Set<string>) => {
   const validKeys = columnIds
     ? columnIds instanceof Set
       ? columnIds
@@ -97,3 +88,36 @@ export const getFiltersStateParser = <TData>(
       ),
   });
 };
+
+export const parseAsDate = createParser<Date | undefined>({
+  parse: (value) => {
+    if (!value) return undefined;
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? undefined : date;
+  },
+  serialize: (value) => value?.toISOString() ?? "",
+});
+
+export const parseAsDateRange = createParser<DateRange | undefined>({
+  parse: (value) => {
+    if (!value) return undefined;
+    try {
+      const parsed = JSON.parse(value);
+      const from = parsed.from ? new Date(parsed.from) : undefined;
+      const to = parsed.to ? new Date(parsed.to) : undefined;
+      if ((from && isNaN(from.getTime())) || (to && isNaN(to.getTime()))) {
+        return undefined;
+      }
+      return { from, to };
+    } catch {
+      return undefined;
+    }
+  },
+  serialize: (value) => {
+    if (!value) return "";
+    return JSON.stringify({
+      from: value.from?.toISOString(),
+      to: value.to?.toISOString(),
+    });
+  },
+});

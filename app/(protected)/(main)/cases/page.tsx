@@ -35,6 +35,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCaseLookups } from "@/hooks/use-case-lookups";
+import { Copiable } from "@/components/ui/copiable";
+import { CasesTableActionBar } from "./_components/case-table-action-bar";
 import type { ColumnDef } from "@tanstack/react-table";
 
 export default function CasesTablePage() {
@@ -56,7 +58,7 @@ export default function CasesTablePage() {
 
   const {
     data: caseLookups,
-    // isLoading: caseLookupsIsLoading,
+    isLoading: caseLookupsIsLoading,
     // isFetching: caseLookupsIsFetching,
   } = useCaseLookups();
   const statusOptions = useMemo(
@@ -65,7 +67,8 @@ export default function CasesTablePage() {
         label: item.name,
         value: item.id as string,
         count:
-          casesData?.payload.filter((caseItem) => caseItem.status === item.id).length || 1,
+          casesData?.payload.filter((caseItem) => String(caseItem.status) === String(item.id))
+            .length || 1,
       })) || [],
     [caseLookups, casesData],
   );
@@ -131,32 +134,39 @@ export default function CasesTablePage() {
         enableHiding: false,
       },
       {
+        id: "id",
+        accessorKey: "id",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
+        cell: ({ cell }) => (
+          <Copiable className="select-all" copyText={String(cell.getValue())} />
+        ),
+        meta: { label: "Case ID" },
+      },
+      {
         // Provide an unique id for the column
         // This id will be used as query key for the column filter
         id: "title",
         accessorKey: "title",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
         cell: ({ row }) => <div>{row.getValue("title")}</div>,
-        // Define the column meta options for sorting, filtering, and view options
+        /** Define the column meta options for sorting, filtering, and view options */
         meta: {
           label: "Title",
           placeholder: "Search Cases...",
           variant: "text",
         },
-        // By default, the column will not be filtered. Set to `true` to enable filtering.
+        /** By default, the column will not be filtered. Set to `true` to enable filtering. */
         enableColumnFilter: true,
         enableHiding: false,
       },
       {
-        // Provide an unique id for the column
-        // This id will be used as query key for the column filter
         id: "court",
         accessorKey: "court",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Court" />,
         cell: ({ row }) => <div>{row.original.court.name}</div>,
         meta: {
           label: "Court",
-          variant: "select",
+          variant: "multiSelect",
           options: courtOptions,
         },
         enableColumnFilter: true,
@@ -195,6 +205,9 @@ export default function CasesTablePage() {
         accessorKey: "permission",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Permission" />,
         cell: ({ row: _ }) => <div className="w-[150px] text-accent-foreground">{"--"}</div>,
+        meta: {
+          label: "Permission",
+        },
         enableSorting: false,
       },
       {
@@ -259,6 +272,9 @@ export default function CasesTablePage() {
   const { table } = useDataTable({
     data: casesData?.payload || [],
     columns,
+    initialState: {
+      columnPinning: { right: ["actions"], left: ["select"] },
+    },
     pageCount: !casesData?.totalCount
       ? 1
       : casesData.totalCount < PageSize
@@ -294,32 +310,36 @@ export default function CasesTablePage() {
       <>
         <DataTable
           table={table}
-          actionBar={<DataTableActionBar visible table={table}></DataTableActionBar>}
+          actionBar={
+            <DataTableActionBar table={table}>
+              <CasesTableActionBar table={table} />
+            </DataTableActionBar>
+          }
           className={cn(casesIsFetching && "opacity-75")}
           isLoading={casesIsLoading}
           skeletonProps={{
             columnCount: columns.length,
-            rowCount: PageSize,
+            rowCount: 10,
             cellWidths: [
               "2rem",
+              "8rem",
               "10rem",
-              ...Array.from({ length: columns.length - 3 }, () => "8rem"),
+              ...Array.from({ length: columns.length - 4 }, () => "8rem"),
             ],
+            hideHeader: true,
           }}
         >
-          {!casesIsLoading && (
-            <Card className="shadow-none">
-              <CardHeader>
-                <CardTitle>Filter Cases</CardTitle>
-                <CardDescription>
-                  <p>Search and filter cases by various criteria</p>
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <DataTableToolbar table={table}></DataTableToolbar>
-              </CardContent>
-            </Card>
-          )}
+          <Card className="shadow-none">
+            <CardHeader>
+              <CardTitle>Filter Cases</CardTitle>
+              <CardDescription>
+                <p>Search and filter cases by various criteria</p>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTableToolbar table={table} />
+            </CardContent>
+          </Card>
         </DataTable>
       </>
     </PageWrapper>

@@ -1,7 +1,8 @@
 import { ValueUnion } from "@/types/utils";
+import { CaseStatuses } from "./enums";
+import { customAlphabet } from "nanoid";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { CaseStatuses } from "./enums";
 
 /**
  * className helper
@@ -114,4 +115,28 @@ export function getCaseStatusLabel(
     default:
       return "Unknown Status";
   }
+}
+
+const prefixes: Record<string, unknown> = {};
+
+interface GenerateIdOptions {
+  length?: number;
+  separator?: string;
+}
+
+export function generateId(
+  prefixOrOptions?: keyof typeof prefixes | GenerateIdOptions,
+  inputOptions: GenerateIdOptions = {},
+) {
+  const finalOptions = typeof prefixOrOptions === "object" ? prefixOrOptions : inputOptions;
+
+  const prefix = typeof prefixOrOptions === "object" ? undefined : prefixOrOptions;
+
+  const { length = 12, separator = "_" } = finalOptions;
+  const id = customAlphabet(
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+    length,
+  )();
+
+  return prefix ? `${prefixes[prefix]}${separator}${id}` : id;
 }

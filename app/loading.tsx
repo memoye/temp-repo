@@ -1,9 +1,9 @@
 "use client";
 
-import { LoadingDots } from "@/components/ui/loading-dots";
-import { Logo } from "@/components/ui/logo";
 import { useEffect } from "react";
 import { useLoadingBar } from "react-top-loading-bar";
+import { LoadingDots } from "@/components/ui/loading-dots";
+import { Logo } from "@/components/ui/logo";
 
 export default function RootLoading() {
   const { start, complete } = useLoadingBar({});

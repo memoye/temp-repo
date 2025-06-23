@@ -1,15 +1,15 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
-import { CalendarIcon, XCircle } from "lucide-react";
 import * as React from "react";
-import type { DateRange } from "react-day-picker";
+import { format as formatDate } from "date-fns";
 
+import { CalendarIcon, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { formatDate } from "@/lib/format";
+import type { Column } from "@tanstack/react-table";
+import type { DateRange } from "react-day-picker";
 
 type DateSelection = Date[] | DateRange;
 
@@ -114,9 +114,9 @@ export function DataTableDateFilter<TData>({
   const formatDateRange = React.useCallback((range: DateRange) => {
     if (!range.from && !range.to) return "";
     if (range.from && range.to) {
-      return `${formatDate(range.from)} - ${formatDate(range.to)}`;
+      return `${formatDate(range.from, "PP")} - ${formatDate(range.to, "PP")}`;
     }
-    return formatDate(range.from ?? range.to);
+    return formatDate(range.from ?? range.to!, "PP");
   }, []);
 
   const label = React.useMemo(() => {
@@ -145,7 +145,7 @@ export function DataTableDateFilter<TData>({
     if (getIsDateRange(selectedDates)) return null;
 
     const hasSelectedDate = selectedDates.length > 0;
-    const dateText = hasSelectedDate ? formatDate(selectedDates[0]) : "Select date";
+    const dateText = hasSelectedDate ? formatDate(selectedDates[0], "PP") : "Select date";
 
     return (
       <span className="flex items-center gap-2">

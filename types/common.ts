@@ -111,7 +111,7 @@ export type FormStep = {
 };
 
 export interface LookupItem {
-  id: number | string;
+  id: string; // [| number] ??
   name: string;
 }
 
