@@ -13,6 +13,7 @@ import {
 import { getCommonPinningStyles } from "@/lib/data-table";
 import { cn } from "@/lib/utils";
 import { DataTableSkeleton, type DataTableSkeletonProps } from "./data-table-skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 interface DataTableProps<TData> extends React.ComponentProps<"div"> {
   table: TanstackTable<TData>;
@@ -30,77 +31,99 @@ export function DataTable<TData>({
   isLoading,
   ...props
 }: DataTableProps<TData>) {
+  const cozyCellWidths = Array.from(
+    { length: skeletonProps?.columnCount || 7 },
+    (_, index) =>
+      skeletonProps?.cellWidths?.[index % skeletonProps.cellWidths.length] ?? "auto",
+  );
+
   return (
     <div className={cn("flex w-full flex-col gap-2.5 overflow-auto", className)} {...props}>
       {children}
 
-      {isLoading ? (
-        <DataTableSkeleton
-          columnCount={7}
-          filterCount={2}
-          cellWidths={["10rem", "30rem", "10rem", "10rem", "6rem", "6rem", "6rem"]}
-          {...skeletonProps}
-          shrinkZero
-        />
-      ) : (
-        <>
-          <div className="overflow-hidden rounded-md border bg-background">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead
-                        key={header.id}
-                        colSpan={header.colSpan}
-                        style={{
-                          ...getCommonPinningStyles({ column: header.column }),
-                        }}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                      {row.getVisibleCells().map((cell) => (
+      <div className="overflow-hidden rounded-md border bg-background">
+        <Table>
+          {!(isLoading && skeletonProps?.hideHeader) && (
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      style={{
+                        ...getCommonPinningStyles({ column: header.column }),
+                      }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+          )}
+          {isLoading ? (
+            <TableBody>
+              {Array.from({
+                length: skeletonProps?.rowCount ?? skeletonProps?.rowCount ?? 10,
+              }).map((_, idx) => (
+                <TableRow key={idx} className="hover:bg-transparent">
+                  {Array.from({
+                    length: table.getAllColumns().length ?? skeletonProps?.columnCount ?? 5,
+                  }).map((_, j) => (
+                    <TableCell
+                      key={j}
+                      style={{
+                        width: cozyCellWidths[j],
+                        minWidth: skeletonProps?.shrinkZero ? cozyCellWidths[j] : "auto",
+                      }}
+                    >
+                      <Skeleton className="h-6 w-full" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          ) : (
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
                         <TableCell
                           key={cell.id}
                           style={{
                             ...getCommonPinningStyles({ column: cell.column }),
                           }}
-                          className={cn(row.getIsSelected() && "bg-secondary!")}
+                          data-state={cell.column.getIsPinned() && "pinned"}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={table.getAllColumns().length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
+                      );
+                    })}
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex flex-col gap-2.5">
-            <DataTablePagination table={table} />
-            {actionBar && table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
-          </div>
-        </>
-      )}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={table.getAllColumns().length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          )}
+        </Table>
+      </div>
+      <div className="flex flex-col gap-2.5">
+        <DataTablePagination table={table} />
+        {actionBar && table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
+      </div>
     </div>
   );
 }

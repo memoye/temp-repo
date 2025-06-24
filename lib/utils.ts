@@ -1,5 +1,5 @@
 import { ValueUnion } from "@/types/utils";
-import { CaseStatuses } from "./enums";
+import { CaseStatuses } from "./enum-values";
 import { customAlphabet } from "nanoid";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";

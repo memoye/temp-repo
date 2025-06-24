@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { Country as CountryCode } from "react-phone-number-input";
 import type { ValueUnion } from "./utils";
-import type { CustomCaseFieldTypes } from "@/lib/enums";
+import type { CustomCaseFieldTypes } from "@/lib/enum-values";
 import type { Control } from "react-hook-form";
 
 export interface ApiResponse<T = unknown> {

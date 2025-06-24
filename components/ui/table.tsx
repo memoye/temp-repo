@@ -47,7 +47,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b transition-colors hover:bg-secondary/50 data-[state=selected]:bg-secondary!",
+        "group/tr border-b transition-colors hover:bg-secondary/50 data-[state=selected]:bg-secondary/50",
         className,
       )}
       {...props}
@@ -60,7 +60,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "_[&:has([role=checkbox])]:pr-0 h-14 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&>[role=checkbox]]:translate-y-[2px]",
+        "h-14 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&>[role=checkbox]]:translate-y-[2px]",
         className,
       )}
       {...props}
@@ -74,6 +74,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
       data-slot="table-cell"
       className={cn(
         "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "data-[state=pinned]:group-hover/tr:bg-secondary!",
         className,
       )}
       {...props}

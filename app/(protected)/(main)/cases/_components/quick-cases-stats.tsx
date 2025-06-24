@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { CaseStatuses } from "@/lib/enums";
+import { CaseStatuses } from "@/lib/enum-values";
 import { ActivityIcon, ArchiveIcon, ClockIcon, FolderIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingDots } from "@/components/ui/loading-dots";

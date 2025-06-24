@@ -205,7 +205,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       return filters;
     }, []);
   }, [filterValues, enableAdvancedFilter]);
-  console.log({ initialColumnFilters });
+  // console.log({ initialColumnFilters });
 
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters);

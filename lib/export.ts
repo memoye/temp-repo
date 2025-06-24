@@ -39,14 +39,14 @@ export function exportTableToCSV<TData>(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `${filename}.csv`);
+  link.setAttribute("download", `${filename}_${new Date().toISOString().split("T")[0]}.csv`);
   link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-export function exportToExcel<TData>(
+export function exportTableToExcel<TData>(
   table: Table<TData>,
   opts: {
     filename?: string;

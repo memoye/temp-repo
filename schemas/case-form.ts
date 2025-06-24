@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { capitalize } from "@/lib/utils";
-import { CaseStatuses, CustomCaseFieldTypes, PermissionUserTypes } from "@/lib/enums";
+import { CaseStatuses, CustomCaseFieldTypes, PermissionUserTypes } from "@/lib/enum-values";
 import type { ValueUnion } from "@/types/utils";
 import { richTextFieldSchemaFactory } from "./common";
 

@@ -14,12 +14,14 @@ import { cn } from "@/lib/utils";
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<"div"> {
   table: Table<TData>;
+  isLoading?: boolean;
 }
 
 export function DataTableToolbar<TData>({
   table,
   children,
   className,
+  isLoading,
   ...props
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;

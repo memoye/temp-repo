@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { caseFormSchema } from "@/schemas/case-form";
-import { CaseStatuses } from "@/lib/enums";
+import { CaseStatuses } from "@/lib/enum-values";
 import type { LookupItem } from "./common";
 import type { ValueUnion } from "./utils";
 

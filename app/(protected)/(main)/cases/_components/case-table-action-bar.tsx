@@ -3,9 +3,7 @@
 import * as React from "react";
 import { SelectTrigger } from "@radix-ui/react-select";
 import type { Table } from "@tanstack/react-table";
-import { ArrowUp, CheckCircle2, Download, Trash2 } from "lucide-react";
-import { toast } from "sonner";
-
+import { ArrowUp, CheckCircle2, DownloadIcon, Trash2 } from "lucide-react";
 import {
   DataTableActionBar,
   DataTableActionBarAction,
@@ -13,10 +11,17 @@ import {
 } from "@/components/data-table/data-table-action-bar";
 import { Select, SelectContent, SelectGroup, SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { exportTableToCSV } from "@/lib/export";
+import { exportTableToCSV, exportTableToExcel } from "@/lib/export";
 // import { deleteTasks, updateTasks } from "../_lib/actions";
 import type { CaseItem } from "@/types/cases";
 import { useCaseLookups } from "@/hooks/use-case-lookups";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const actions = ["update-status", "update-priority", "export", "delete"] as const;
 
@@ -75,15 +80,26 @@ export function CasesTableActionBar({ table }: CasesTableActionBarProps) {
   //   [rows],
   // );
 
-  const onCaseExport = React.useCallback(() => {
-    setCurrentAction("export");
-    startTransition(() => {
-      exportTableToCSV(table, {
-        excludeColumns: ["select", "actions"],
-        onlySelected: true,
+  const onCaseExport = React.useCallback(
+    (type?: "csv" | "xlsx") => {
+      setCurrentAction("export");
+      startTransition(() => {
+        if (type === "xlsx")
+          exportTableToExcel(table, {
+            excludeColumns: ["select", "actions"],
+            onlySelected: true,
+            filename: "Cases",
+          });
+        else
+          exportTableToCSV(table, {
+            excludeColumns: ["select", "actions"],
+            onlySelected: true,
+            filename: "Cases",
+          });
       });
-    });
-  }, [table]);
+    },
+    [table],
+  );
 
   // const onTaskDelete = React.useCallback(() => {
   //   setCurrentAction("delete");
@@ -108,8 +124,8 @@ export function CasesTableActionBar({ table }: CasesTableActionBarProps) {
         className="hidden data-[orientation=vertical]:h-5 sm:block"
       />
       <div className="flex items-center gap-1.5">
-        <Select
-        // onValueChange={(value: Task["status"]) => onTaskUpdate({ field: "status", value })}
+        {/* <Select
+        onValueChange={(value: Task["status"]) => onTaskUpdate({ field: "status", value })}
         >
           <SelectTrigger asChild>
             <DataTableActionBarAction
@@ -122,18 +138,18 @@ export function CasesTableActionBar({ table }: CasesTableActionBarProps) {
           </SelectTrigger>
           <SelectContent align="center">
             <SelectGroup>
-              {/* {tasks.status.enumValues.map((status) => (
+              {tasks.status.enumValues.map((status) => (
                 <SelectItem key={status} value={status} className="capitalize">
                   {status}
                 </SelectItem>
-              ))} */}
+              ))} 
             </SelectGroup>
           </SelectContent>
         </Select>
         <Select
-        // onValueChange={(value: Task["priority"]) =>
-        //   onTaskUpdate({ field: "priority", value })
-        // }
+         onValueChange={(value: Task["priority"]) =>
+           onTaskUpdate({ field: "priority", value })
+        }
         >
           <SelectTrigger asChild>
             <DataTableActionBarAction
@@ -153,19 +169,36 @@ export function CasesTableActionBar({ table }: CasesTableActionBarProps) {
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
-        <DataTableActionBarAction
-          size="icon"
-          tooltip="Export Cases"
-          isPending={getIsActionPending("export")}
-          onClick={onCaseExport}
-        >
-          <Download />
-        </DataTableActionBarAction>
+        </Select> */}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <DataTableActionBarAction size="icon" tooltip="Export Cases">
+              <DownloadIcon />
+            </DataTableActionBarAction>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="start" sideOffset={5} className="p-2">
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <button className="w-full" type="button" onClick={() => onCaseExport("xlsx")}>
+                  Excel
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <button className="w-full" type="button" onClick={() => onCaseExport("csv")}>
+                  CSV
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <DataTableActionBarAction
           size="icon"
           tooltip="Delete Cases"
           isPending={getIsActionPending("delete")}
+          className="bg-transparent! text-destructive! hover:bg-destructive/10!"
           // onClick={onTaskDelete}
         >
           <Trash2 />
