@@ -18,19 +18,12 @@ import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getInitials } from "@/lib/utils";
 // import { SwitchAccountAlert } from "@/app/(connect)/login/switch-account-alert";
-import { oidcLogout } from "@/auth";
 
 export function UserActions() {
   const { data, status: sessionStatus } = useSession();
 
   function handleLogout() {
-    signOut({ redirect: false, redirectTo: "/" }).then(() => {
-      if (data?.id_token) {
-        oidcLogout(data?.id_token);
-      } else {
-        window.location.href = "/login";
-      }
-    });
+    signOut({ redirectTo: "/" });
   }
 
   const profile = data?.user;

@@ -8,6 +8,7 @@ import {
 } from "lexical";
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from "@lexical/list";
 import { $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
+import { devLog } from "@/lib/utils";
 
 export function AutoBlockPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -16,6 +17,7 @@ export function AutoBlockPlugin() {
     return editor.registerCommand(
       KEY_SPACE_COMMAND,
       (payload: KeyboardEvent) => {
+        devLog(payload);
         const selection = $getSelection();
 
         if (!$isRangeSelection(selection) || !selection.isCollapsed()) {

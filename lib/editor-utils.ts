@@ -3,7 +3,6 @@ import type { SerializedDocument } from "@lexical/file";
 import { $isAtNodeEnd } from "@lexical/selection";
 import { $isListItemNode, $isListNode, type ListItemNode } from "@lexical/list";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function* generateReader<T = any>(reader: ReadableStreamDefaultReader<T>) {
   let done = false;
   while (!done) {
@@ -65,7 +64,7 @@ const SUPPORTED_URL_PROTOCOLS = new Set(["http:", "https:", "mailto:", "sms:", "
 export function sanitizeUrl(url: string): string {
   try {
     const parsedUrl = new URL(url);
-    // eslint-disable-next-line no-script-url
+
     if (!SUPPORTED_URL_PROTOCOLS.has(parsedUrl.protocol)) {
       return "about:blank";
     }
@@ -81,7 +80,7 @@ const urlRegExp = new RegExp(
 );
 export function validateUrl(url: string): boolean {
   // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
-  // Maybe show a dialog where they user can type the URL before inserting it.
+  // Maybe show a dialog where the user can type the URL before inserting it.
   return url === "https://" || urlRegExp.test(url);
 }
 

@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-import { SessionExpiryHandler } from "../_components/session-expiry-handler";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 type ProtectedLayoutProps = {
@@ -8,12 +6,5 @@ type ProtectedLayoutProps = {
 };
 
 export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
-  const session = await auth();
-
-  return (
-    <>
-      <SessionExpiryHandler initialSession={session} />
-      <SidebarProvider>{children}</SidebarProvider>
-    </>
-  );
+  return <SidebarProvider>{children}</SidebarProvider>;
 }

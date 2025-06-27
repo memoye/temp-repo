@@ -171,7 +171,7 @@ export const permissionsSchema = z.object({
 // Combine all schemas
 export const caseFormSchema = z.object({
   generalInfo: generalInfoSchema,
-  relatedContacts: relatedContactsSchema,
+  relatedContacts: relatedContactsSchema as any,
   // permissions: partiesSchema,
   // details: caseDetailsSchema,
   // documents: documentsSchema,

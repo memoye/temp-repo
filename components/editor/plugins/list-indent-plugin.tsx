@@ -11,7 +11,7 @@ import {
   $isListNode,
   ListItemNode,
   ListNode,
-  $createListItemNode,
+  // $createListItemNode,
   $createListNode,
 } from "@lexical/list";
 import { $getNearestNodeOfType } from "@lexical/utils";

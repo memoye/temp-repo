@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { caseFormSchema } from "@/schemas/case-form";
+import { caseFormSchema } from "@/schemas/case-schema";
 import { isEqual } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { InfoIcon } from "lucide-react";
@@ -96,7 +96,7 @@ export default function NewCasePage() {
     mode: "onChange",
   });
 
-  const { handleSubmit, trigger, formState, watch, reset } = form;
+  const { handleSubmit, trigger: _, formState, watch, reset } = form;
   const { isValid } = formState;
   const formData = watch();
 

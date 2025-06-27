@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CaseStatus } from "./case-status-badge";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { CaseItem, CaseLookups } from "@/types/cases";
+import type { CaseItem } from "@/types/cases";
 import { Option } from "@/types/data-table";
 
 export function getCasesColumns(
@@ -57,7 +57,8 @@ export function getCasesColumns(
         <Copiable className="select-all" copyText={String(cell.getValue())} />
       ),
       meta: { label: "Case No." },
-      size: 200,
+      size: 170,
+      enableHiding: false,
     },
     {
       id: "title",
@@ -75,9 +76,9 @@ export function getCasesColumns(
     },
     {
       id: "court",
-      accessorKey: "court",
+      // accessorKey: "court",
+      accessorFn: (row) => row.court.name,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Court" />,
-      cell: ({ row }) => <div>{row.original.court.name}</div>,
       meta: {
         label: "Court",
         variant: "multiSelect",
@@ -100,6 +101,7 @@ export function getCasesColumns(
     {
       id: "location",
       accessorKey: "location",
+      accessorFn: (row) => row.city || row.state.name,
       header: ({ column }) => <DataTableColumnHeader column={column} title="Location" />,
       cell: ({ row }) => (
         <div className="grid min-w-[150px] gap-0.5">

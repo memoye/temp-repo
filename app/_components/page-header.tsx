@@ -1,13 +1,25 @@
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-interface PageHeaderProps {
-  title: string;
+interface BasePageHeaderProps {
   description?: React.ReactNode;
   className?: string;
   pageActions?: React.ReactNode;
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
+
+interface PageHeaderPropsWithTitle extends BasePageHeaderProps {
+  title: React.ReactNode;
+  children?: never;
+}
+
+interface PageHeaderPropsWithChildren extends BasePageHeaderProps {
+  title?: never;
+  children: React.ReactNode;
+}
+
+type PageHeaderProps = PageHeaderPropsWithTitle | PageHeaderPropsWithChildren;
 
 export const PageHeader = ({
   title,
@@ -15,6 +27,7 @@ export const PageHeader = ({
   className,
   pageActions,
   isLoading,
+  children,
 }: PageHeaderProps) => {
   return (
     <div
@@ -24,9 +37,11 @@ export const PageHeader = ({
       )}
     >
       <section className="my-1 flex-1 space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">
-          {isLoading ? <Skeleton className="mb-4 block h-5 w-1/4" /> : title}
-        </h1>
+        {children || (
+          <h1 className="text-2xl font-bold text-foreground">
+            {isLoading ? <Skeleton className="mb-4 block h-5 w-1/4" /> : title}
+          </h1>
+        )}
 
         {isLoading ? (
           <div className="space-y-2">

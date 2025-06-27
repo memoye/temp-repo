@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ComponentProps } from "react";
+import { useState, type ComponentProps } from "react";
 import { useLoadingBar } from "react-top-loading-bar";
 import { showErrorToast } from "@/lib/toast";
 import { signIn } from "next-auth/react";
@@ -17,39 +17,21 @@ export function LoginButton({ loadingText, children, className, ...props }: Logi
   const [isPending, setIsPending] = useState(false);
 
   function handleLogin() {
+    start("continuous");
+    document.body.style.cursor = "wait";
     setIsPending(true);
 
-    // Get saved redirect path (default to "/dashboard" if none)
-    const redirectTo = localStorage.getItem("redirectPath") || "/dashboard";
-
-    // Clear redirectPath after reading it
-    localStorage.removeItem("redirectPath");
-
-    // Call signIn with callbackUrl
-    signIn("login", { redirectTo })
+    signIn("login")
       .catch((reason) => {
         console.error(reason);
         showErrorToast("An unexpected error occurred. Please try again");
       })
       .finally(() => {
+        setTimeout(complete);
+        document.body.style.cursor = "default";
         setIsPending(false);
       });
   }
-
-  useEffect(() => {
-    if (isPending) {
-      start();
-      document.body.style.cursor = "wait";
-    } else {
-      complete();
-      document.body.style.cursor = "default";
-    }
-
-    return () => {
-      document.body.style.cursor = "default";
-      complete();
-    };
-  }, [isPending, start, complete]);
 
   return (
     <button

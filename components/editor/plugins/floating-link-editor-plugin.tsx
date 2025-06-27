@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type Dispatch, type JSX } from "react";
+import { useCallback, useEffect, useRef, useState, type Dispatch } from "react";
 import { createPortal } from "react-dom";
 import {
   $createLinkNode,
@@ -172,6 +172,7 @@ function FloatingLinkEditor({
       inputRef.current.focus();
       setIsLink(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLinkEditMode, isLink]);
 
   const monitorInputInteraction = (event: React.KeyboardEvent<HTMLInputElement>) => {

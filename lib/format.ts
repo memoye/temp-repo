@@ -1,3 +1,5 @@
+import { devLog } from "./utils";
+
 export function formatDate(
   date: Date | string | number | undefined,
   opts: Intl.DateTimeFormatOptions = {},
@@ -11,7 +13,8 @@ export function formatDate(
       year: opts.year ?? "numeric",
       ...opts,
     }).format(new Date(date));
-  } catch (_err) {
+  } catch (err) {
+    devLog(err);
     return "";
   }
 }

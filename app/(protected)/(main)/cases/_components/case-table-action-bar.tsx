@@ -1,20 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { SelectTrigger } from "@radix-ui/react-select";
 import type { Table } from "@tanstack/react-table";
-import { ArrowUp, CheckCircle2, DownloadIcon, Trash2 } from "lucide-react";
+import { DownloadIcon, Trash2 } from "lucide-react";
 import {
   DataTableActionBar,
   DataTableActionBarAction,
   DataTableActionBarSelection,
 } from "@/components/data-table/data-table-action-bar";
-import { Select, SelectContent, SelectGroup, SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { exportTableToCSV, exportTableToExcel } from "@/lib/export";
 // import { deleteTasks, updateTasks } from "../_lib/actions";
 import type { CaseItem } from "@/types/cases";
-import { useCaseLookups } from "@/hooks/use-case-lookups";
+// import { useCaseLookups } from "@/hooks/use-case-lookups";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,9 +21,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const actions = ["update-status", "update-priority", "export", "delete"] as const;
+// const actions = ["update-status", "update-priority", "export", "delete"] as const;
 
-type Action = (typeof actions)[number];
+type Action = "export" | "delete";
 
 interface CasesTableActionBarProps {
   table: Table<CaseItem>;
@@ -41,19 +39,19 @@ export function CasesTableActionBar({ table }: CasesTableActionBarProps) {
     [isPending, currentAction],
   );
 
-  const {
-    data: caseLookups,
-    isLoading: caseLookupsIsLoading,
-    // isFetching: caseLookupsIsFetching,
-  } = useCaseLookups();
-  const statusOptions = React.useMemo(
-    () =>
-      caseLookups?.caseStatus.map((item) => ({
-        label: item.name,
-        value: item.id as string,
-      })) || [],
-    [caseLookups],
-  );
+  // const {
+  //   data: caseLookups,
+  //   // isLoading: caseLookupsIsLoading,
+  //   // isFetching: caseLookupsIsFetching,
+  // } = useCaseLookups();
+  // const statusOptions = React.useMemo(
+  //   () =>
+  //     caseLookups?.caseStatus.map((item) => ({
+  //       label: item.name,
+  //       value: item.id as string,
+  //     })) || [],
+  //   [caseLookups],
+  // );
 
   // const onTaskUpdate = React.useCallback(
   //   ({

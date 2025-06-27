@@ -95,7 +95,7 @@ export const authConfig = {
       }
     },
 
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       const decoded = decodeJwtPayload(token.access_token as string);
 
       if (decoded) {
@@ -115,6 +115,7 @@ export const authConfig = {
           given_name: decoded.given_name,
           family_name: decoded.family_name,
           preferred_username: decoded.preferred_username,
+          username: decoded.username,
         };
       }
 
@@ -131,48 +132,4 @@ export const authConfig = {
   },
 } satisfies NextAuthConfig;
 
-declare module "next-auth" {
-  interface Session {
-    access_token?: string;
-    refresh_token: string;
-    expires_at: number;
-    id_token?: string;
-    error?: string;
-
-    user: {
-      FirmId?: string;
-      Permissions?: string[];
-      Tenant?: string;
-      TenantId?: string;
-      access_token?: string;
-      auth_time?: number;
-      email?: string;
-      expires_at?: number;
-      family_name?: string;
-      given_name?: string;
-      id?: string;
-      phone_number?: string;
-      preferred_username?: string;
-      refresh_token?: string;
-      role?: string;
-    } & DefaultSession["user"];
-  }
-}
-
-export const {
-  handlers: { GET, POST },
-  signOut,
-  signIn,
-  auth,
-} = NextAuth(authConfig);
-
-export async function oidcLogout(idToken: string) {
-  const baseUrl = `${process.env.NEXT_PUBLIC_AUTH_URL}/connect/endsession`;
-  const logoutUrl = new URL(baseUrl);
-
-  logoutUrl.searchParams.set("post_logout_redirect_uri", process.env.NEXT_PUBLIC_APP_URL!);
-  logoutUrl.searchParams.set("id_token_hint", idToken);
-  logoutUrl.searchParams.set("client_id", process.env.NEXT_PUBLIC_AUTH_CLIENT_ID!);
-
-  window.location.href = logoutUrl.toString();
-}
+export const { handlers, signOut, signIn, auth } = NextAuth(authConfig);

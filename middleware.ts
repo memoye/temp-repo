@@ -1,21 +1,27 @@
-export { auth as middleware } from "./auth";
+import { auth } from "@/auth";
+import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/routes";
 
+export default auth((req) => {
+  const { nextUrl } = req;
+
+  // Check if the user is authenticated (i.e., if the 'auth' property exists in the request)
+  const isAuthenticated = !!req.auth;
+
+  // Check if the current route is a public route (i.e., if it's listed in the PUBLIC_ROUTES array)
+  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+
+  // If the route is public and the user is authenticated, redirect them to the default redirect URL
+  if (isPublicRoute && isAuthenticated) {
+    return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl)); // Redirect to the default page if logged in
+  }
+
+  // If the route is not public and the user is not authenticated, redirect them to the root (login) page
+  if (!isAuthenticated && !isPublicRoute) {
+    return Response.redirect(new URL(ROOT, nextUrl)); // Redirect to the root URL (e.g., login) if not authenticated
+  }
+});
+
+// Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-  matcher: [
-    "/dashboard",
-    "/cases",
-    "/clients",
-    "/tasks",
-    "/invoices",
-    "/calendar",
-    "/documents",
-    "/reports",
-    "/time-tracking",
-    "/users",
-    "/template",
-    "/settings",
-
-    "/dashboard/:path*",
-    "/settings/:path*",
-  ], // Explicitly list protected paths
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

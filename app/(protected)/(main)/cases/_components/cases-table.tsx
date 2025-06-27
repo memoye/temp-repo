@@ -1,29 +1,13 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { cn, getCaseStatusLabel } from "@/lib/utils";
 import { useDataTable } from "@/hooks/use-data-table";
-import { PlusIcon } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCases } from "@/data/services/case-manager";
-import { PageHeader } from "@/app/_components/page-header";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-import { PageWrapper } from "@/app/_components/page-wrapper";
-import { Button } from "@/components/ui/button";
-import { QuickCasesStats } from "./quick-cases-stats";
 import {
   Card,
   CardContent,
@@ -42,7 +26,7 @@ interface CasesTableProps {
   initialData?: ApiResponse<CaseItem[]>;
 }
 export default function CasesTable({ initialData }: CasesTableProps) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const [Page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [PageSize] = useQueryState("perPage", parseAsInteger.withDefault(20));
@@ -51,8 +35,8 @@ export default function CasesTable({ initialData }: CasesTableProps) {
   const {
     data: casesData,
     isLoading: casesIsLoading,
-    isFetchedAfterMount,
-    isError: casesIsError,
+    // isFetchedAfterMount,
+    // isError: casesIsError,
     isFetching: casesIsFetching,
   } = useQuery({
     queryKey: ["cases", Page, PageSize, Keyword],
@@ -130,34 +114,32 @@ export default function CasesTable({ initialData }: CasesTableProps) {
         : Math.ceil(casesData.totalCount / PageSize),
   });
 
-  function handleCreateCase() {
-    router.push("/cases/new");
-  }
+  // function handleCreateCase() {
+  //   router.push("/cases/new");
+  // }
 
   return (
-    <>
-      <DataTable
-        table={table}
-        isLoading={casesIsLoading}
-        actionBar={
-          <DataTableActionBar table={table}>
-            <CasesTableActionBar table={table} />
-          </DataTableActionBar>
-        }
-        className={cn(casesIsFetching && "opacity-75")}
-      >
-        <Card className="shadow-none">
-          <CardHeader>
-            <CardTitle>Filter Cases</CardTitle>
-            <CardDescription>
-              <p>Search and filter cases by various criteria</p>
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <DataTableToolbar table={table} />
-          </CardContent>
-        </Card>
-      </DataTable>
-    </>
+    <DataTable
+      table={table}
+      isLoading={casesIsLoading}
+      actionBar={
+        <DataTableActionBar table={table}>
+          <CasesTableActionBar table={table} />
+        </DataTableActionBar>
+      }
+      className={cn(casesIsFetching && "opacity-75")}
+    >
+      <Card className="shadow-none">
+        <CardHeader>
+          <CardTitle>Filter Cases</CardTitle>
+          <CardDescription>
+            <p>Search and filter cases by various criteria</p>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTableToolbar table={table} />
+        </CardContent>
+      </Card>
+    </DataTable>
   );
 }

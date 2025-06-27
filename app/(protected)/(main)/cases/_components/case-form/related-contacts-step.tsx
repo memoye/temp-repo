@@ -1,14 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { type Control, useFieldArray, useFormContext } from "react-hook-form";
+import {
+  type Control,
+  useFieldArray,
+  // useFormContext
+} from "react-hook-form";
 import { Plus, Users, Eye, Scale, UserCheck, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ContactForm } from "./contact-form";
-import type { CaseFormValues } from "@/types/cases";
+// import type { CaseFormValues } from "@/types/cases";
+import { cn } from "@/lib/utils";
 
 interface RelatedContactsStepProps {
   control: Control<any>;
@@ -68,7 +73,7 @@ const defaultContact = {
 
 export function RelatedContactsStep({ control, watch, className }: RelatedContactsStepProps) {
   const [activeTab, setActiveTab] = useState("relatedContacts");
-  const { setValue } = useFormContext<CaseFormValues>();
+  // const { setValue } = useFormContext<CaseFormValues>();
 
   const relatedContactsArray = useFieldArray({
     control,
@@ -121,7 +126,7 @@ export function RelatedContactsStep({ control, watch, className }: RelatedContac
     const fieldName = `contacts.${categoryId}`;
 
     return (
-      <div className="space-y-4">
+      <div className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`rounded-lg p-2 ${category.color} text-white`}>

@@ -327,12 +327,11 @@ function DataTableFilterItem<TData>({
     const [showValueSelector, setShowValueSelector] = React.useState(false);
 
     const column = columns.find((column) => column.id === filter.id);
-    if (!column) return null;
 
     const operatorListboxId = `${filterItemId}-operator-listbox`;
     const inputId = `${filterItemId}-input`;
 
-    const columnMeta = column.columnDef.meta;
+    const columnMeta = column?.columnDef.meta;
     const filterOperators = getFilterOperators(filter.variant);
 
     const onItemKeyDown = React.useCallback(
@@ -361,6 +360,8 @@ function DataTableFilterItem<TData>({
         onFilterRemove,
       ],
     );
+
+    if (!column) return null;
 
     return (
       <div

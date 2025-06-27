@@ -5,8 +5,6 @@ import { CaseStatuses } from "@/lib/enum-values";
 import { ActivityIcon, ArchiveIcon, ClockIcon, FolderIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingDots } from "@/components/ui/loading-dots";
-import type { CaseItem } from "@/types/cases";
-import type { ApiResponse } from "@/types/common";
 import { useQuery } from "@tanstack/react-query";
 import { getCases } from "@/data/services/case-manager";
 
@@ -18,7 +16,7 @@ export function QuickCasesStats({ className }: QuickCasesStatsProps) {
   const {
     data: casesData,
     isLoading,
-    isError,
+    // isError,
     isFetching,
   } = useQuery({
     queryKey: ["cases", "stats"],

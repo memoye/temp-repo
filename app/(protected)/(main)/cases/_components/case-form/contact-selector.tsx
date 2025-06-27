@@ -153,7 +153,7 @@ export function ContactSelector({
             <Card>
               <CardContent className="p-4 text-center text-muted-foreground">
                 {searchQuery ? (
-                  <p>No contacts found matching "{searchQuery}"</p>
+                  <p>No contacts found matching &quot;{searchQuery}&quot;</p>
                 ) : (
                   <p>No contacts available</p>
                 )}

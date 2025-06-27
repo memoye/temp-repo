@@ -5,8 +5,6 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { QuickCasesStats } from "./_components/quick-cases-stats";
 import CasesTable from "./_components/cases-table";
-import { Suspense } from "react";
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import { getCases } from "@/data/services/case-manager";
 
 export default async function CasesPage({

@@ -1,7 +1,6 @@
 "use client";
 
-import { Dispatch, JSX, useCallback, useEffect, useRef, useState } from "react";
-import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { $isCodeHighlightNode } from "@lexical/code";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -31,6 +30,7 @@ import { getDOMRangeRect, getSelectedNode, setFloatingElemPosition } from "@/lib
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
 import { useFloatingLinkContext } from "@/context/editor/floating-link-context";
+import { devLog } from "@/lib/utils";
 
 function FloatingTextFormat({
   editor,
@@ -55,7 +55,7 @@ function FloatingTextFormat({
   isSubscript: boolean;
   isSuperscript: boolean;
   isUnderline: boolean;
-  setIsLinkEditMode: Dispatch<boolean>;
+  setIsLinkEditMode: React.Dispatch<boolean>;
 }) {
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
@@ -84,6 +84,7 @@ function FloatingTextFormat({
     }
   }
   function mouseUpListener(e: MouseEvent) {
+    devLog(e);
     if (popupCharStylesEditorRef?.current) {
       if (popupCharStylesEditorRef.current.style.pointerEvents !== "auto") {
         popupCharStylesEditorRef.current.style.pointerEvents = "auto";
@@ -286,7 +287,7 @@ function FloatingTextFormat({
 function useFloatingTextFormatToolbar(
   editor: LexicalEditor,
   anchorElem: HTMLDivElement | null,
-  setIsLinkEditMode: Dispatch<boolean>,
+  setIsLinkEditMode: React.Dispatch<boolean>,
 ) {
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);

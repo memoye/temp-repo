@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,7 +28,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 
 export function GeneralInfoStep() {
-  const { control, watch } = useFormContext<CaseFormValues>();
+  const { control } = useFormContext<CaseFormValues>();
 
   return (
     <div className="space-y-4">
@@ -51,7 +50,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.client"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem className="w-full">
               <FormLabel htmlFor="client">Client</FormLabel>
               <FormControl>
@@ -89,7 +88,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.state"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel>State</FormLabel>
               <FormControl>
@@ -113,7 +112,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.fileNumber"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel>Court</FormLabel>
               <FormControl>
@@ -146,7 +145,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.originatingLawyers"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel htmlFor="originatingLawyers">Originating Solicitors</FormLabel>
               <FormControl>
@@ -170,7 +169,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.responsibleLawyers"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel htmlFor="responsibleLawyers">Responsible Solicitors</FormLabel>
               <FormControl>
@@ -191,7 +190,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.practiceArea"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel htmlFor="practiceArea">Practice Area</FormLabel>
               <FormControl>
@@ -212,7 +211,7 @@ export function GeneralInfoStep() {
         <FormField
           control={control}
           name="generalInfo.status"
-          render={({ field, fieldState }) => (
+          render={({ field: _, fieldState }) => (
             <FormItem>
               <FormLabel>Case Stage</FormLabel>
               <Select

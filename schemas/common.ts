@@ -24,3 +24,24 @@ export function richTextFieldSchemaFactory({
     });
   }
 }
+
+export const countrySchema = z.object({
+  dialCode: z.string().min(1, {
+    message: "Please select country.",
+  }),
+  code: z.string().min(1, {
+    message: "Please select country.",
+  }),
+  name: z.string().min(1, {
+    message: "Please select country",
+  }),
+});
+
+export const addressSchema = z.object({
+  state: z.string().min(1, "State is required"),
+  city: z.string().min(1, "Please select your city"),
+  street: z.string().min(1, {
+    message: "Enter street",
+  }),
+  postalCode: z.string().optional(),
+});

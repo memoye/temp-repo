@@ -21,7 +21,7 @@ export function DataTableToolbar<TData>({
   table,
   children,
   className,
-  isLoading,
+  // isLoading,
   ...props
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;

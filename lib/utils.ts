@@ -140,3 +140,13 @@ export function generateId(
 
   return prefix ? `${prefixes[prefix]}${separator}${id}` : id;
 }
+
+/**
+ * A function to log to the console in development mode
+ * @param args Whatever you want to log
+ */
+export function devLog(...args: any) {
+  if (process.env.NODE_ENV === "development") {
+    console.dir("DevLog: ", ...args, "⚠️⚠️This is only logged in development mode⚠️⚠️");
+  }
+}

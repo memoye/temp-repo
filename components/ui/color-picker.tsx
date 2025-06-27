@@ -18,11 +18,11 @@ type Props = {
 
 export default function ColorPicker({
   disabled = false,
-  stopCloseOnClickSelf = true,
+  stopCloseOnClickSelf: _ = true,
   color,
   onChange,
   icon,
-  label,
+  // label,
   className,
   ...rest
 }: Props) {

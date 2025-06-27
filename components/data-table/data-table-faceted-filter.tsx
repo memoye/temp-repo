@@ -1,9 +1,7 @@
 "use client";
 
-import type { Option } from "@/types/data-table";
-import type { Column } from "@tanstack/react-table";
+import * as React from "react";
 import { Check, PlusCircle, XCircle } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,14 +13,11 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import * as React from "react";
+import type { Column } from "@tanstack/react-table";
+import type { Option } from "@/types/data-table";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -40,9 +35,8 @@ export function DataTableFacetedFilter<TData, TValue>({
   const [open, setOpen] = React.useState(false);
 
   const columnFilterValue = column?.getFilterValue();
-  const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : [],
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const selectedValues = new Set(Array.isArray(columnFilterValue) ? columnFilterValue : []);
 
   const onItemSelect = React.useCallback(
     (option: Option, isSelected: boolean) => {
@@ -83,7 +77,7 @@ export function DataTableFacetedFilter<TData, TValue>({
               aria-label={`Clear ${title} filter`}
               tabIndex={0}
               onClick={onReset}
-              className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
             >
               <XCircle />
             </div>
@@ -97,18 +91,12 @@ export function DataTableFacetedFilter<TData, TValue>({
                 orientation="vertical"
                 className="mx-0.5 data-[orientation=vertical]:h-4"
               />
-              <Badge
-                variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
-              >
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
                 {selectedValues.size}
               </Badge>
               <div className="hidden items-center gap-1 lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
+                  <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
@@ -134,7 +122,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandInput placeholder={title} />
           <CommandList className="max-h-full">
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup className="max-h-[18.75rem] overflow-y-auto overflow-x-hidden">
+            <CommandGroup className="max-h-[18.75rem] overflow-x-hidden overflow-y-auto">
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value);
 
@@ -146,9 +134,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     <div
                       className={cn(
                         "flex size-4 items-center justify-center rounded-sm border border-primary",
-                        isSelected
-                          ? "bg-primary"
-                          : "opacity-50 [&_svg]:invisible",
+                        isSelected ? "bg-primary" : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <Check />
@@ -156,9 +142,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {option.icon && <option.icon />}
                     <span className="truncate">{option.label}</span>
                     {option.count && (
-                      <span className="ml-auto font-mono text-xs">
-                        {option.count}
-                      </span>
+                      <span className="ml-auto font-mono text-xs">{option.count}</span>
                     )}
                   </CommandItem>
                 );

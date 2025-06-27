@@ -1,20 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { redirect } from "next/navigation";
-import { LoginButton } from "@/app/_components/login-button";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
+import { LoginButton } from "@/app/_components/login-button";
+import { ArrowRightIcon } from "lucide-react";
 
 export default function LoginPage() {
-  const { data, status } = useSession();
-
-  if (data?.user && status === "authenticated") {
-    redirect("/dashboard");
-  }
-
   return (
     <div className="relative flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">

@@ -63,7 +63,10 @@ export function exportTableToExcel<TData>(
     const workbook = XLSX.utils.book_new();
 
     const worksheet = XLSX.utils.json_to_sheet(
-      table.getRowModel().rows.map((row) => {
+      (opts?.onlySelected
+        ? table.getFilteredSelectedRowModel().rows
+        : table.getRowModel().rows
+      ).map((row) => {
         return headers.reduce(
           (acc, header) => {
             acc[header] = row.getValue(header);

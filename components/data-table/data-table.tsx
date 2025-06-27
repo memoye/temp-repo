@@ -1,5 +1,4 @@
 import { type Table as TanstackTable, flexRender } from "@tanstack/react-table";
-import type * as React from "react";
 
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import {
@@ -12,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { getCommonPinningStyles } from "@/lib/data-table";
 import { cn } from "@/lib/utils";
-import { DataTableSkeleton, type DataTableSkeletonProps } from "./data-table-skeleton";
+import { type DataTableSkeletonProps } from "./data-table-skeleton";
 import { Skeleton } from "../ui/skeleton";
 
 interface DataTableProps<TData> extends React.ComponentProps<"div"> {
@@ -20,6 +19,7 @@ interface DataTableProps<TData> extends React.ComponentProps<"div"> {
   actionBar?: React.ReactNode;
   isLoading?: boolean;
   skeletonProps?: DataTableSkeletonProps;
+  emptyMessage?: React.ReactNode;
 }
 
 export function DataTable<TData>({
@@ -29,6 +29,7 @@ export function DataTable<TData>({
   className,
   skeletonProps,
   isLoading,
+  emptyMessage,
   ...props
 }: DataTableProps<TData>) {
   const cozyCellWidths = Array.from(
@@ -110,9 +111,9 @@ export function DataTable<TData>({
                 <TableRow>
                   <TableCell
                     colSpan={table.getAllColumns().length}
-                    className="h-24 text-center"
+                    className="h-24 bg-muted! text-center"
                   >
-                    No results.
+                    {emptyMessage ?? "No results."}
                   </TableCell>
                 </TableRow>
               )}
