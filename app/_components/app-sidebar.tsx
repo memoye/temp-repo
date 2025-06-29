@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { navMain } from "@/data/static/nav";
+import { navMain } from "@/config/nav";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavFooter } from "./nav-footer";
 import { LogoHeader } from "./logo-header";

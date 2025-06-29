@@ -1,10 +1,13 @@
 import { z } from "zod";
-import { caseFormSchema } from "@/schemas/case-schema";
-import { CaseStatuses } from "@/lib/enum-values";
-import type { LookupItem } from "./common";
+import { caseFormSchema, caseNoteSchema } from "@/schemas/cases-schema";
+import { CaseStatuses, CustomCaseFieldTypes } from "@/lib/enum-values";
+import type { ILookupItem, LookupItem } from "./common";
 import type { ValueUnion } from "./utils";
 
 export type CaseFormValues = z.infer<typeof caseFormSchema>;
+
+export type CaseNoteValues = z.infer<typeof caseNoteSchema>;
+
 export type CaseLookups = Record<
   | "caseStatus"
   | "taskStatus"
@@ -14,6 +17,12 @@ export type CaseLookups = Record<
   | "permissionTypes",
   LookupItem[]
 >;
+
+export interface CustomCaseFieldLookupItem extends ILookupItem {
+  description: string;
+  fieldType: ValueUnion<typeof CustomCaseFieldTypes>;
+  options: Array<ILookupItem & { description: string }>;
+}
 
 type User = {
   id: number;
@@ -39,7 +48,15 @@ export interface CaseItem {
   status: ValueUnion<typeof CaseStatuses>;
 }
 
-export interface ICaseDetails {
+export interface CaseNote {
+  createdBy: string;
+  updatedBy: string;
+  id: number;
+  note: string;
+  nextActionDate: string;
+}
+
+export interface Case {
   description: string;
   originatingLawyer: User;
   originatingClient: User;

@@ -1,4 +1,5 @@
 import { hasTimeOverlap } from "@/lib/calendar-utils";
+import { validateTimeRange } from "@/lib/datetime-utils";
 import { EventReminderTypes, RecurringRuleTypes, TimeUnits } from "@/lib/enum-values";
 import { ValueUnion } from "@/types/utils";
 import { z } from "zod";
@@ -166,5 +167,51 @@ export const eventScheduleSchema = z
     {
       message: "Recurring rule end date must be after the event's end time",
       path: ["recurringRule.endDate"],
+    },
+  );
+
+export const cancelEventScheduleSchema = z.object({
+  eventId: z.string().min(1, { message: "Select event to cancel" }),
+  reason: z.string().optional(),
+});
+
+export const customDayTimeSchema = z
+  .object({
+    dayOfWeek: z.number().int().min(0).max(6).optional(), // 0-6 representing Sunday to Saturday
+    startTime: z.string({ message: "Enter valid time" }).optional(),
+    endTime: z.string({ message: "Enter valid time" }).optional(),
+  })
+  .refine(validateTimeRange, {
+    message: "End time must be after start time",
+    path: ["endTime"],
+  });
+
+// Main availability schedule schema
+export const availabilityScheduleSchema = z
+  .object({
+    daysOfWeek: z.array(z.number().int().min(0).max(6)), // Array of days (0-6)
+    startTime: z.string({ message: "Enter valid time" }),
+    endTime: z.string({ message: "Enter valid time" }),
+    customDayTimes: z.array(customDayTimeSchema.optional()).optional(),
+  })
+  .refine(validateTimeRange, {
+    message: "End time must be after start time",
+    path: ["endTime"],
+  })
+  .refine(
+    (data) => {
+      // If no custom day times, validation passes
+      if (!data.customDayTimes?.length) return true;
+
+      // Check each custom day time
+      return data.customDayTimes.every(
+        (customDay) =>
+          // Either start time or end time must be different
+          customDay?.startTime !== data.startTime || customDay?.endTime !== data.endTime,
+      );
+    },
+    {
+      message: "Custom day times must be different from default times",
+      path: ["customDayTimes"],
     },
   );

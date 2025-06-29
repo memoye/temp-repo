@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { createEventSchedule } from "@/data/services/schedule-manager";
+import { schedulesManager } from "@/services/schedules";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 // import { eventScheduleSchema } from "@/schemas/schedule-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,7 +61,7 @@ export function EventForm({ start = today, end = today, close, onCancel }: Event
   const queryClient = useQueryClient();
 
   const { mutate: createEventMutation, isPending: isCreatingEvent } = useMutation({
-    mutationFn: createEventSchedule,
+    mutationFn: schedulesManager.events.schedule,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
       showSuccessToast("Event created successfully");

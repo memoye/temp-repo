@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/routes";
+import { DEFAULT_REDIRECT, PROTECTED_ROUTES, ROOT } from "@/lib/routes";
 
 export default auth((req) => {
   const { nextUrl } = req;
@@ -7,8 +7,13 @@ export default auth((req) => {
   // Check if the user is authenticated (i.e., if the 'auth' property exists in the request)
   const isAuthenticated = !!req.auth;
 
-  // Check if the current route is a public route (i.e., if it's listed in the PUBLIC_ROUTES array)
-  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+  // Check if path matches any protected route (including nested routes)
+  const isProtectedRoute = PROTECTED_ROUTES.some((protectedRoute) =>
+    nextUrl.pathname.startsWith(protectedRoute),
+  );
+
+  // Public routes are those that aren't protected
+  const isPublicRoute = !isProtectedRoute;
 
   // If the route is public and the user is authenticated, redirect them to the default redirect URL
   if (isPublicRoute && isAuthenticated) {

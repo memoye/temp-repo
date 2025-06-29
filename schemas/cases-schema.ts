@@ -1,36 +1,8 @@
 import { z } from "zod";
-import { capitalize } from "@/lib/utils";
 import { CaseStatuses, CustomCaseFieldTypes, PermissionUserTypes } from "@/lib/enum-values";
+import { getUserSchema } from "./common";
+import { taskSchema } from "./tasks-schema";
 import type { ValueUnion } from "@/types/utils";
-import { richTextFieldSchemaFactory } from "./common";
-
-export const getUserSchema = (as?: string, message?: string) => {
-  const field = as ? capitalize(as) : "User";
-
-  return z.object(
-    {
-      name: z.string().min(1, { message: `${field} Name is required` }),
-      email: z.string().email({ message: `${field} Email is invalid` }),
-      phoneNumber: z.string().min(1, { message: `${field} Phone Number is required` }),
-      dialCode: z.string().min(1, { message: `${field} Dial Code is required` }),
-      contactId: z.string().min(1, { message: `Select ${as ?? ""} from list or create new` }),
-      relationship: z.string().min(0, { message: `${field} Relationship is required` }),
-      contactType: z
-        .number()
-        // .refine(
-        //   (value) =>
-        //     Object.values(ContactTypes).includes(value as TContactType),
-        //   { message: "Select 'Individual' or 'Organization'" },
-        // )
-        .nullable()
-        .optional(),
-    },
-    {
-      message,
-      invalid_type_error: "Select Individual or Organization",
-    },
-  );
-};
 
 export const customFieldOptionSchema = z.object({
   id: z.number().int(),
@@ -175,4 +147,39 @@ export const caseFormSchema = z.object({
   // permissions: partiesSchema,
   // details: caseDetailsSchema,
   // documents: documentsSchema,
+});
+
+export const caseNoteSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z
+    .string()
+    .min(17, {
+      message: "The description must be at least 10 characters.",
+    })
+    .max(500, {
+      message: "The description must be at most 500 characters.",
+    }),
+  nextActionDate: z
+    .date({
+      required_error: "Select date.",
+    })
+    .optional(),
+});
+
+export const caseNoteWithTaskSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z
+    .string()
+    .min(17, {
+      message: "The description must be at least 10 characters.",
+    })
+    .max(500, {
+      message: "The description must be at most 500 characters.",
+    }),
+  nextActionDate: z
+    .date({
+      required_error: "Select date.",
+    })
+    .optional(),
+  task: taskSchema.optional(),
 });

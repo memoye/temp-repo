@@ -191,8 +191,13 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-button-link {
+  border-radius: 50%;
   width: 40px;
   height: 40px;
+
+  &:hover {
+    background-color: var(--color-muted);
+  }
 }
 
 .rbc-event,

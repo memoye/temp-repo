@@ -150,3 +150,32 @@ export function devLog(...args: any) {
     console.dir("DevLog: ", ...args, "⚠️⚠️This is only logged in development mode⚠️⚠️");
   }
 }
+
+/**
+ * Flatten a nested object into a URLSearchParams object
+ */
+export function flattenToSearchParams(
+  obj: Record<string, unknown>,
+  prefix: string = "",
+): string {
+  const params = new URLSearchParams();
+
+  function recurse(o: Record<string, unknown>, path: string) {
+    for (const [key, value] of Object.entries(o)) {
+      const newPath = path ? `${path}[${encodeURIComponent(key)}]` : encodeURIComponent(key);
+
+      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+        recurse(value as Record<string, unknown>, newPath);
+      } else if (Array.isArray(value)) {
+        value.forEach((item) => {
+          params.append(`${newPath}[]`, String(item));
+        });
+      } else {
+        params.append(newPath, String(value));
+      }
+    }
+  }
+
+  recurse(obj, prefix);
+  return params.toString();
+}

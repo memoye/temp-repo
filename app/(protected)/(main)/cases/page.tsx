@@ -5,7 +5,7 @@ import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { QuickCasesStats } from "./_components/quick-cases-stats";
 import CasesTable from "./_components/cases-table";
-import { getCases } from "@/data/services/case-manager";
+import { CasesManager } from "@/services/case-manager";
 
 export default async function CasesPage({
   searchParams,
@@ -13,7 +13,7 @@ export default async function CasesPage({
   searchParams: Promise<{ perPage: string; page: string; title: string }>;
 }) {
   const search = await searchParams;
-  const initialData = await getCases({
+  const initialData = await CasesManager.getAll({
     Page: Number(search.page ?? 1),
     PageSize: Number(search.perPage ?? 20),
     Keyword: search.title ?? "",

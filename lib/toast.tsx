@@ -1,10 +1,9 @@
-import type { ReactNode } from "react";
 import { AlertCircleIcon, CheckCircleIcon, InfoIcon, XCircleIcon } from "lucide-react";
 import { toast, type ExternalToast } from "sonner";
 
-export const showSuccessToast = (message: string | ReactNode, data?: ExternalToast) =>
+export const showSuccessToast = (message: string | React.ReactNode, data?: ExternalToast) =>
   toast.success(message, {
-    icon: <CheckCircleIcon className="text-success size-5" />,
+    icon: <CheckCircleIcon className="size-5 text-success" />,
     ...{
       dismissible: true,
       classNames: {
@@ -15,20 +14,20 @@ export const showSuccessToast = (message: string | ReactNode, data?: ExternalToa
     },
   });
 
-export const showErrorToast = (message: string | ReactNode, data?: ExternalToast) =>
+export const showErrorToast = (message: string | React.ReactNode, data?: ExternalToast) =>
   toast.error(message, {
     icon: <XCircleIcon className="size-5 text-destructive" />,
     ...{
       dismissible: true,
       classNames: {
         toast: "border-destructive",
-        closeButton: "border-destructive text-destructive ",
+        closeButton: "border-destructive text-destructive",
       },
       ...data,
     },
   });
 
-export const showInfoToast = (message: string | ReactNode, data?: ExternalToast) =>
+export const showInfoToast = (message: string | React.ReactNode, data?: ExternalToast) =>
   toast.info(message, {
     icon: <InfoIcon className="size-5 text-primary" />,
     ...{
@@ -41,12 +40,12 @@ export const showInfoToast = (message: string | ReactNode, data?: ExternalToast)
     },
   });
 
-export const showLoadingToast = (message: string | ReactNode, data?: ExternalToast) =>
+export const showLoadingToast = (message: string | React.ReactNode, data?: ExternalToast) =>
   toast.loading(message, data);
 
-export const showWarningToast = (message: string | ReactNode, data?: ExternalToast) =>
+export const showWarningToast = (message: string | React.ReactNode, data?: ExternalToast) =>
   toast.warning(message, {
-    icon: <AlertCircleIcon className="text-warning size-5" />,
+    icon: <AlertCircleIcon className="size-5 text-warning" />,
     ...{
       dismissible: true,
       ...data,

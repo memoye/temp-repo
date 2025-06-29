@@ -1,12 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-// import { useRouter } from "next/navigation";
 import { cn, getCaseStatusLabel } from "@/lib/utils";
 import { useDataTable } from "@/hooks/use-data-table";
 import { DataTable } from "@/components/data-table/data-table";
 import { useQuery } from "@tanstack/react-query";
-import { getCases } from "@/data/services/case-manager";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import {
   Card,
@@ -19,12 +17,14 @@ import { DataTableActionBar } from "@/components/data-table/data-table-action-ba
 import { parseAsInteger, useQueryState } from "nuqs";
 import { CasesTableActionBar } from "./case-table-action-bar";
 import { getCasesColumns } from "./cases-table-columns";
-import { ApiResponse } from "@/types/common";
-import { CaseItem } from "@/types/cases";
+import { CasesManager } from "@/services/case-manager";
+import type { ApiResponse } from "@/types/common";
+import type { CaseItem } from "@/types/cases";
 
 interface CasesTableProps {
   initialData?: ApiResponse<CaseItem[]>;
 }
+const now = Date.now() - 5 * 60 * 1000;
 export default function CasesTable({ initialData }: CasesTableProps) {
   // const router = useRouter();
 
@@ -40,9 +40,9 @@ export default function CasesTable({ initialData }: CasesTableProps) {
     isFetching: casesIsFetching,
   } = useQuery({
     queryKey: ["cases", Page, PageSize, Keyword],
-    queryFn: () => getCases({ Page, PageSize, Keyword }),
+    queryFn: () => CasesManager.getAll({ Page, PageSize, Keyword }),
     initialData,
-    initialDataUpdatedAt: Date.now() - 5 * 60 * 1000,
+    initialDataUpdatedAt: now,
     staleTime: 5 * 60 * 1000,
   });
 

@@ -1,5 +1,5 @@
 import type { FormStep } from "@/types/common";
-import { generalInfoSchema, relatedContactsSchema } from "@/schemas/case-schema";
+import { generalInfoSchema, relatedContactsSchema } from "@/schemas/cases-schema";
 
 import { GeneralInfoStep } from "@/app/(protected)/(main)/cases/_components/case-form/general-info-step";
 import { RelatedContactsStep } from "@/app/(protected)/(main)/cases/_components/case-form/related-contacts-step";

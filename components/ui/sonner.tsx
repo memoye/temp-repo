@@ -22,7 +22,7 @@ export function Toaster({ className, ...props }: ToasterProps) {
           description: "group-[.toast]:text-muted-foreground",
           actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
-          icon: "absolute top-5 left-3",
+          icon: "absolute top-0 left-0",
         },
       }}
       {...props}

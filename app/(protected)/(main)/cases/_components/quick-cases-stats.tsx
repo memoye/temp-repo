@@ -6,7 +6,7 @@ import { ActivityIcon, ArchiveIcon, ClockIcon, FolderIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingDots } from "@/components/ui/loading-dots";
 import { useQuery } from "@tanstack/react-query";
-import { getCases } from "@/data/services/case-manager";
+import { CasesManager } from "@/services/case-manager";
 
 interface QuickCasesStatsProps {
   className?: string;
@@ -20,10 +20,10 @@ export function QuickCasesStats({ className }: QuickCasesStatsProps) {
     isFetching,
   } = useQuery({
     queryKey: ["cases", "stats"],
-    queryFn: () => getCases({ PageSize: 500 }),
+    queryFn: () => CasesManager.getCases({ PageSize: 500 }),
   });
 
-  const cases = casesData?.payload || [];
+  const casesPayload = casesData?.payload || [];
 
   return (
     <div
@@ -54,7 +54,7 @@ export function QuickCasesStats({ className }: QuickCasesStatsProps) {
             {isLoading ? (
               <LoadingDots size="sm" animation="pulse" />
             ) : (
-              cases.filter((c) => c.status === CaseStatuses.Active).length
+              casesPayload.filter((c) => c.status === CaseStatuses.Active).length
             )}
           </div>
         </CardContent>
@@ -81,7 +81,7 @@ export function QuickCasesStats({ className }: QuickCasesStatsProps) {
             {isLoading ? (
               <LoadingDots size="sm" animation="pulse" />
             ) : (
-              cases.filter((c) => c.status === CaseStatuses.Closed).length
+              casesPayload.filter((c) => c.status === CaseStatuses.Closed).length
             )}
           </div>
         </CardContent>

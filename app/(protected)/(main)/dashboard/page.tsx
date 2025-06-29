@@ -112,8 +112,7 @@ export default async function DashboardPage() {
         title="Dashboard"
       />
 
-      <p className="text-sm">{JSON.stringify(session?.user)}</p>
-
+      {/* TODO: Create `Welcome` component that checks if user is new or not and greets based on that and time of day */}
       <section className="space-y-2">
         <h2 className="text-xl font-bold">
           Hi, {session?.user?.given_name} {session?.user?.family_name}! 👋

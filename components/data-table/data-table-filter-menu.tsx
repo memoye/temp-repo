@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { getDefaultFilterOperator, getFilterOperators } from "@/lib/data-table";
-import { formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/__format";
 import { generateId, cn } from "@/lib/utils";
 
 import { getFiltersStateParser } from "@/lib/parsers";

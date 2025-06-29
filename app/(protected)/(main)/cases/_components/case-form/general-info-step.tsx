@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { BasicEditor } from "@/components/editor/basic";
 import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/_combobox";
 import {
   FormControl,
   FormField,

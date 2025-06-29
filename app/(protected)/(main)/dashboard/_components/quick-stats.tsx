@@ -1,5 +1,5 @@
 import type { StatTrend } from "@/types/dashboard";
-import { statMeta } from "@/data/static/stat-meta";
+import { statMeta } from "@/config/stat-meta";
 import { QuickStat } from "@/types/dashboard";
 import { MinusIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import {

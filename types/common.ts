@@ -4,12 +4,22 @@ import type { ValueUnion } from "./utils";
 import type { CustomCaseFieldTypes } from "@/lib/enum-values";
 import type { Control } from "react-hook-form";
 
+export type Service =
+  | "connect"
+  | "identity"
+  | "cases"
+  | "clients"
+  | "billing"
+  | "crm"
+  | "events"
+  | "subscriptions";
+
 export interface ApiResponse<T = unknown> {
   payload: T;
   message: string | null;
   totalCount?: number;
   code: number;
-  errors: string[];
+  errors: string[] | null;
 }
 
 export interface PaginatedRequestParams {
@@ -23,7 +33,7 @@ export interface PaginatedRequestParams {
 
 export type { CountryCode };
 
-export interface ICountry {
+export interface Country {
   name: string;
   code: CountryCode;
   dialCode: string;

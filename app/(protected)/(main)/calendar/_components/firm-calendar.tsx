@@ -5,9 +5,12 @@ import { dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { CustomBigCalendar } from "@/components/big-calendar/custom-big-calendar";
-import { SlotInfo, Views } from "react-big-calendar";
-
-// import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useQuery } from "@tanstack/react-query";
+import { CasesManager } from "@/services/case-manager";
+import { Case } from "@/types/cases";
+import { type SlotInfo, Views } from "react-big-calendar";
+import type { ApiError } from "@/lib/api";
+import type { ApiResponse } from "@/types/common";
 
 const locales = {
   "en-US": enUS,
@@ -38,13 +41,18 @@ export function FirmCalendar() {
     setDate(newDate);
   }
 
-  const handleViewChange = (newView: React.SetStateAction<any>) => {
+  function handleViewChange(newView: React.SetStateAction<any>) {
     setView(newView);
-  };
+  }
 
-  const handleSelectSlot = (slotInfo: SlotInfo) => {
+  function handleSelectSlot(slotInfo: SlotInfo) {
     setSelectedSlot(slotInfo);
-  };
+  }
+
+  const { data, error, isError } = useQuery<ApiResponse<Case>, ApiError>({
+    queryKey: ["firm-calendar"],
+    queryFn: () => CasesManager.getById("90"),
+  });
 
   // const handleCreateEvent = (data: { title: string; start: string; end: string }) => {
   //   const newEvent = {

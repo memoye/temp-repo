@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { PasswordInput } from "./password-input";
 
 export interface InputProps extends React.ComponentProps<"input"> {
   styled?: boolean;
@@ -6,7 +7,16 @@ export interface InputProps extends React.ComponentProps<"input"> {
   hasError?: boolean;
 }
 
-function Input({ className, type, ...props }: InputProps) {
+function Input({ className, type, hasError, ...props }: InputProps) {
+  if (type === "password") {
+    return (
+      <PasswordInput
+        className={cn("inputClassName", className, hasError ? "border-destructive" : "")}
+        {...props}
+      />
+    );
+  }
+
   return (
     <input
       type={type}
