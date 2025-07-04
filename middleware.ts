@@ -22,11 +22,12 @@ export default auth((req) => {
 
   // If the route is not public and the user is not authenticated, redirect them to the root (login) page
   if (!isAuthenticated && !isPublicRoute) {
+    console.log(`Bounced from ${nextUrl.pathname}`);
     return Response.redirect(new URL(ROOT, nextUrl)); // Redirect to the root URL (e.g., login) if not authenticated
   }
 });
 
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|__nextjs_font|_next/image|assets|favicon.ico).*)"],
 };

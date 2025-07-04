@@ -25,7 +25,7 @@ export default async function SignUpPage() {
 
             <div className="relative mr-10">
               <Image
-                src={"/dashboard-overview.png"}
+                src={"/assets/dashboard-overview.png"}
                 alt="Chronica dashboard overview "
                 className="rounded-lg duration-1000 select-none"
                 draggable={false}
@@ -50,17 +50,23 @@ export default async function SignUpPage() {
         <div className="flex w-full flex-1 flex-col items-center justify-center">
           {/* @2xl/signup-side:bg-red-500 */}
           <div className="mx-auto flex w-full max-w-3xl flex-col justify-center space-y-6 px-4 pb-6 lg:mx-0 lg:pb-16">
-            <h1 className="mt-2 space-y-2 text-xl font-semibold tracking-tight md:text-2xl">
+            <h1 className="mt-2 mb-2! space-y-2 text-xl font-semibold tracking-tight md:text-2xl">
               Create an account
               <span className="sr-only">
                 &nbsp;on&nbsp;<span className="text-primary">Chronica</span>
               </span>
             </h1>
+            <p className="text-sm">
+              Already have an account,{" "}
+              <Link className="text-primary hover:underline" href="/login">
+                Login
+              </Link>
+            </p>
 
             <Suspense
               fallback={
                 <div className="grid h-full min-h-[calc(100dvh-12rem)] w-full place-items-center">
-                  <LoadingDots />
+                  <LoadingDots className="text-primary" animation="pulse" />
                 </div>
               }
             >

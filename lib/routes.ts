@@ -1,6 +1,6 @@
 import { navMain } from "@/config/nav";
 
-export const ROOT = "/";
+export const ROOT = "/login";
 export const PUBLIC_ROUTES = [
   "/",
   "/onboarding",

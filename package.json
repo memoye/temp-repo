@@ -71,11 +71,13 @@
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
+    "react-number-format": "^5.4.4",
     "react-phone-number-input": "^3.4.12",
     "react-top-loading-bar": "^3.0.2",
     "recharts": "^2.15.4",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
+    "timescape": "^0.7.1",
     "zod": "^3.25.67"
   },
   "devDependencies": {

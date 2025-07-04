@@ -25,74 +25,74 @@ export interface FirmAvailabilitiesQueryParams {
   DurationInMinutes: number;
 }
 
-export class CalendarService {
-  private readonly config = { service: "events", requireAuth: true } as const;
+const config = { service: "events", requireAuth: true } as const;
 
+class SchedulesService {
   // Availability
   readonly availability = {
     updateCalendar: (data: AvailabilityScheduleValues, id?: string) =>
       api.post<CalendarAvailability>(
         id ? `/availability/update-calendar/${id}` : `/availability/add-calendar`,
         data,
-        { ...this.config },
+        { ...config },
       ),
 
     createBlackout: (data: BlackoutsValues) =>
       api.post<BlackoutsValues[]>(`/availability/add-holiday`, data, {
-        ...this.config,
+        ...config,
       }),
 
     updateBlackout: ({ id, ...data }: BlackoutsValues) =>
       api.post<BlackoutsValues>(`/availability/update-holiday/${id}`, data, {
-        ...this.config,
+        ...config,
       }),
 
     getBlackouts: () =>
       api.get<BlackoutsValues[]>(`/availability/my-holiday`, {
-        ...this.config,
+        ...config,
       }),
 
     getUserAvailabilities: (params: UserAvailabilitiesQueryParams) =>
       api.get<UserAvailability[]>(`/availability/user`, {
-        ...this.config,
+        ...config,
         params,
       }),
 
     getCurrentUserAvailability: (params?: { UserId?: string }) =>
       api.get<UserAvailabilitySchedule>(`/availability/my-calendar`, {
-        ...this.config,
+        ...config,
         params,
       }),
 
     getFirmAvailabilities: (params: FirmAvailabilitiesQueryParams) =>
       api.get<UserAvailability[]>(`/availability/firm`, {
-        ...this.config,
+        ...config,
         params,
       }),
   };
 
   // Event
   readonly events = {
-    getUserEvents: () => api.get<Event[]>(`/my-events`, { ...this.config }),
+    getUserEvents: () => api.get<Event[]>(`/my-events`, { ...config }),
 
-    getFirmEvents: () => api.get<Event[]>(`/firm-events`, { ...this.config }),
+    getFirmEvents: () => api.get<Event[]>(`/firm-events`, { ...config }),
 
-    schedule: (data: EventScheduleValues) =>
-      api.post<boolean>(`/schedule`, data, { ...this.config }),
+    createSchedule: (data: EventScheduleValues) =>
+      api.post<boolean>(`/schedule`, data, { ...config }),
 
     cancel: (data: CancelEventScheduleValues) =>
-      api.post<boolean>(`/cancel`, data, { ...this.config }),
+      api.post<boolean>(`/cancel`, data, { ...config }),
   };
 
   // Lookup
   readonly lookups = {
-    getEventTypes: () => api.get<EventType[]>(`/lookup/event-types`, { ...this.config }),
+    getEventTypes: () => api.get<EventType[]>(`/lookup/event-types`, { ...config }),
 
     getHolidayTypes: () =>
       api.get<Omit<EventType, "code">[]>(`/lookup/holiday-types`, {
-        ...this.config,
+        ...config,
       }),
   };
 }
 
-export const schedulesManager = new CalendarService();
+export const Schedules = new SchedulesService();

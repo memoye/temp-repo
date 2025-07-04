@@ -58,3 +58,12 @@ export function hasTimeOverlap(times: { startTime?: string; endTime?: string }[]
   }
   return false;
 }
+
+/**
+ * Format seconds into [MM]:[SS] sec(s)
+ **/
+export const formatTime = (secs: number) => {
+  const minutes = Math.floor(secs / 60);
+  const remainingSeconds = secs % 60;
+  return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")} ${Math.abs(remainingSeconds) === 1 ? "secs" : "sec"}`;
+};

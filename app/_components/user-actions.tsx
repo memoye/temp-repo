@@ -17,13 +17,20 @@ import { Separator } from "@/components/ui/separator";
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getInitials } from "@/lib/utils";
+import { completeLogout } from "@/auth";
 // import { SwitchAccountAlert } from "@/app/(connect)/login/switch-account-alert";
 
 export function UserActions() {
   const { data, status: sessionStatus } = useSession();
 
   function handleLogout() {
-    signOut({ redirectTo: "/" });
+    signOut({ redirect: false }).then(() => {
+      if (data?.id_token) {
+        completeLogout(data?.id_token);
+      } else {
+        window.location.href = "/login";
+      }
+    });
   }
 
   const profile = data?.user;

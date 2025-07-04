@@ -48,6 +48,7 @@ interface PluginsProps {
   showDelete?: boolean;
   maxLength?: Nullable<number>;
   showHelp?: boolean;
+  hideToolbar?: boolean;
 }
 
 export function Plugins({
@@ -56,6 +57,7 @@ export function Plugins({
   hasError,
   maxLength,
   showDelete,
+  hideToolbar,
   showHelp,
 }: PluginsProps) {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
@@ -71,7 +73,7 @@ export function Plugins({
   return (
     <div className="relative">
       {/* toolbar plugins */}
-      <ToolbarPlugin>
+{  !hideToolbar &&    <ToolbarPlugin>
         {({ blockType: _ }) => (
           <div
             className={cn(
@@ -104,6 +106,7 @@ export function Plugins({
                 <FontFormatToolbarPlugin className="rounded-none" format="underline" />
                 <FontFormatToolbarPlugin className="rounded-l-none" format="strikethrough" />
               </div>
+
               <SubSuperToolbarPlugin />
 
               <Separator orientation="vertical" className="mx-0.5" />
@@ -112,7 +115,7 @@ export function Plugins({
             </div>
             <div
               className={cn(
-                "sticky right-0 flex items-center border-l bg-transparent px-1 backdrop-blur-2xl",
+                "sticky right-0 flex items-center border-l bg-background px-1",
                 hasError ? "border-destructive" : "border-input",
               )}
             >
@@ -122,7 +125,7 @@ export function Plugins({
             </div>
           </div>
         )}
-      </ToolbarPlugin>
+      </ToolbarPlugin>}
 
       <div className="relative">
         <RichTextPlugin

@@ -116,7 +116,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-today {
-  background-color: var(--color-muted);
+  background-color: var(--color-accent);
 }
 
 .rbc-toolbar {
@@ -190,7 +190,8 @@ button.rbc-input::-moz-focus-inner {
   margin-left: 10px;
 }
 
-.rbc-button-link {
+/* .rbc-button-link */
+.rbc-button-link:not(:has(span[role="columnheader"])) {
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -271,7 +272,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-selected-cell {
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary) !important;
 }
 
 .rbc-show-more {
@@ -354,9 +355,43 @@ button.rbc-input::-moz-focus-inner {
 
   & > button {
     border-radius: 50%;
-    background-color: var(--color-primary);
     aspect-ratio: 1;
-    color: var(--color-primary-foreground);
+    color: var(--color-foreground);
+
+    &:hover {
+      background-color: var(--color-secondary);
+    }
+  }
+}
+
+.rbc-date-cell.rbc-current {
+  --bg-grad: linear-gradient(to left, var(--color-secondary), transparent);
+  animation: blink-in 500ms steps(5) 1 forwards;
+  border-right: 4px solid transparent;
+}
+
+@keyframes blink-in {
+  0% {
+    border-right-color: var(--color-primary);
+  }
+  25% {
+    border-right-color: transparent;
+  }
+  50% {
+    border-right-color: var(--color-primary);
+    background-image: var(--bg-grad);
+  }
+  70% {
+    border-right-color: var(--color-primary);
+    background: transparent;
+  }
+  85% {
+    border-right-color: var(--color-primary);
+    background-image: var(--bg-grad);
+  }
+  100% {
+    border-right-color: var(--color-primary);
+    background-image: var(--bg-grad);
   }
 }
 
@@ -512,12 +547,25 @@ button.rbc-input::-moz-focus-inner {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid var(--color-border);
   min-height: 40px;
   font-size: 14px;
   -webkit-flex-flow: column nowrap;
   -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
+}
+
+.rbc-day-slot .rbc-time-slot:after {
+  display: block;
+  border-top: 1px solid var(--color-secondary);
+  width: 100%;
+  content: "";
+}
+
+.rbc-time-slot:not(.rbc-today .rbc-time-slot) {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .rbc-time-gutter,
@@ -563,6 +611,17 @@ button.rbc-input::-moz-focus-inner {
   position: absolute;
   align-items: flex-start;
   overflow: hidden;
+}
+
+/* .rbc-event .rbc-background-event {
+} */
+
+/* .rbc-event-label {
+  display: none !important;
+} */
+
+.rbc-events-container {
+  width: 100% !important;
 }
 
 .rbc-day-slot .rbc-event-label {
@@ -684,6 +743,11 @@ button.rbc-input::-moz-focus-inner {
   -ms-flex-direction: column;
   flex-direction: column;
   border-left: 1px solid var(--color-border);
+}
+
+.rbc-time-header-cell-single-day .rbc-header.rbc-today {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
 }
 
 .rbc-rtl .rbc-time-header-content {

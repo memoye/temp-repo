@@ -94,7 +94,7 @@ export const onboardInvitedUserSchema = z
     }
   });
 
-export const passwordCreationSchema = z
+export const passwordFormSchema = z
   .object({
     password: z
       .string({

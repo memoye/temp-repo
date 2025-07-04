@@ -72,7 +72,7 @@ export class ApiError extends Error {
   }
 }
 
-class ApiClient {
+export class ApiClient {
   private async getAuthHeaders(requireAuth = false): Promise<Record<string, string>> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",

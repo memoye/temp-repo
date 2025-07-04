@@ -73,7 +73,12 @@ export function PhoneInput({
 }
 
 const InputComponent = ({ className, ...props }: React.ComponentProps<"input">) => (
-  <Input className={cn("rounded-s-none rounded-e-md", className)} {...props} />
+  <Input
+    className={cn("rounded-s-none rounded-e-md", className)}
+    {...props}
+    inputMode="tel"
+    type="tel"
+  />
 );
 
 type CountrySelectOption = { label: string; value: RPNInput.Country };

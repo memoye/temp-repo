@@ -7,12 +7,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { LoaderCircleIcon } from "lucide-react";
+import { LoaderCircleIcon, LoaderIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { dismissToast, showErrorToast, showSuccessToast } from "@/lib/toast";
 import { onboardFirmSchema } from "@/schemas/connect";
 import { useIPData } from "@/hooks/use-ip-data";
-import { connect } from "@/services/connect";
+import { Connect } from "@/services/connect";
 import {
   Form,
   FormControl,
@@ -37,6 +37,14 @@ import {
   ComboboxTagsInput,
 } from "@/components/ui/combobox";
 import type { Country, CountryCode } from "@/types/common";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { NumberInput } from "@/components/ui/number-input";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -66,7 +74,7 @@ export function SignUpForm() {
   const { ipCountryCode } = useIPData();
   const { data: countriesData, isLoading: isLoadingCountries } = useSuspenseQuery({
     queryKey: ["lookups", "countries"],
-    queryFn: connect.lookups.getCountries,
+    queryFn: Connect.lookups.getCountries,
     select: (data) => data?.payload,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -76,7 +84,7 @@ export function SignUpForm() {
 
   const { data: states, isLoading: isLoadingStates } = useQuery({
     queryKey: ["lookups", "states", selectedCountry],
-    queryFn: () => connect.lookups.getStates(selectedCountry?.code || ipCountryCode),
+    queryFn: () => Connect.lookups.getStates(selectedCountry?.code || ipCountryCode),
     select: (data) => data?.payload,
     enabled: !!selectedCountry?.code,
     refetchOnWindowFocus: false,
@@ -86,7 +94,7 @@ export function SignUpForm() {
 
   const { data: cities, isLoading: isLoadingCities } = useQuery({
     queryKey: ["lookups", "cities", form.watch("address.state")],
-    queryFn: () => connect.lookups.getCities(form.watch("address.state")),
+    queryFn: () => Connect.lookups.getCities(form.watch("address.state")),
     select: (data) => data?.payload,
     enabled: !!form.watch("address.state"),
     refetchOnWindowFocus: false,
@@ -96,7 +104,7 @@ export function SignUpForm() {
 
   const { data: practiceAreas, isLoading: isLoadingPracticeAreas } = useQuery({
     queryKey: ["lookups", "practiceAreas"],
-    queryFn: connect.lookups.getPracticeAreas,
+    queryFn: Connect.lookups.getPracticeAreas,
     select: (data) => data?.payload,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -105,7 +113,7 @@ export function SignUpForm() {
 
   const { data: firmSizes, isLoading: isLoadingFirmSizes } = useQuery({
     queryKey: ["lookups", "firmSizes"],
-    queryFn: connect.lookups.getFirmSizes,
+    queryFn: Connect.lookups.getFirmSizes,
     select: (data) => data?.payload,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -114,7 +122,7 @@ export function SignUpForm() {
 
   const { mutate: onboardFirmMutation, isPending: isOnboardingFirm } = useMutation({
     mutationKey: ["onboarding", "create-account"],
-    mutationFn: connect.onboardFirm,
+    mutationFn: Connect.onboardFirm,
     onError: (error) => {
       showErrorToast(error?.message || "An error occured. Please try again", {
         closeButton: true,
@@ -276,7 +284,14 @@ export function SignUpForm() {
               render={({ field, fieldState }) => (
                 <FormItem className="flex-1">
                   <FormLabel aria-required>{selectedCountry?.stateLabel || "State"}</FormLabel>
-                  <Combobox type="single" value={field.value} onValueChange={field.onChange}>
+                  <Combobox
+                    type="single"
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.resetField("address.cityId");
+                    }}
+                  >
                     <FormControl>
                       <ComboboxInput
                         disabled={isOnboardingFirm}
@@ -287,7 +302,7 @@ export function SignUpForm() {
                             ? "Loading..."
                             : field.value
                               ? states?.find((s) => String(s.id) === String(field.value))?.name
-                              : "Search state..."
+                              : "Search state"
                         }
                         error={fieldState.invalid}
                       />
@@ -333,7 +348,7 @@ export function SignUpForm() {
                               : field.value
                                 ? cities?.find((s) => String(s.id) === String(field.value))
                                     ?.name
-                                : "Search state..."
+                                : "Search state"
                           }
                           error={fieldState.invalid}
                         />
@@ -372,9 +387,9 @@ export function SignUpForm() {
                   <Combobox type="multiple" value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <ComboboxTagsInput
-                        placeholder={cn(
-                          isLoadingPracticeAreas ? "Loading..." : "Search practice areas...",
-                        )}
+                        placeholder={
+                          isLoadingPracticeAreas ? "Loading..." : "Search practice areas"
+                        }
                         disabled={isOnboardingFirm}
                         error={fieldState.invalid}
                         autoComplete="none"
@@ -418,47 +433,34 @@ export function SignUpForm() {
             <FormField
               control={form.control}
               name="firmSizeId"
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel aria-required>Firm Size</FormLabel>
-                  <Combobox
-                    type="single"
-                    value={String(field.value)}
+                  <FormLabel aria-required htmlFor="firmSize">
+                    Firm Size
+                  </FormLabel>
+                  <Select
                     onValueChange={(value) => field.onChange(Number(value))}
+                    defaultValue={String(field.value || "")}
                   >
                     <FormControl>
-                      <ComboboxInput
-                        disabled={isOnboardingFirm}
-                        autoComplete={"none"}
-                        className={cn(field.value && "placeholder:text-foreground")}
-                        placeholder={
-                          isLoadingFirmSizes
-                            ? "Loading..."
-                            : field.value
-                              ? firmSizes?.find((s) => String(s.id) === String(field.value))
-                                  ?.name
-                              : "Search state..."
-                        }
-                        error={fieldState.invalid}
-                      />
+                      <SelectTrigger className="w-full" id="firmSize">
+                        <SelectValue placeholder="Select firm size" />
+                      </SelectTrigger>
                     </FormControl>
-                    <ComboboxContent>
-                      <ComboboxGroup>
-                        {isLoadingFirmSizes ? (
-                          <ComboboxLoading />
-                        ) : (
-                          <>
-                            <ComboboxEmpty>No results.</ComboboxEmpty>
-                            {firmSizes?.map((size) => (
-                              <ComboboxItem key={size.id} value={size.id}>
-                                {size.name}
-                              </ComboboxItem>
-                            ))}
-                          </>
-                        )}
-                      </ComboboxGroup>
-                    </ComboboxContent>
-                  </Combobox>
+                    <SelectContent>
+                      {isLoadingFirmSizes ? (
+                        <div className="grid min-h-[80px] w-full place-items-center">
+                          <LoaderIcon className="animate-spin text-accent-foreground" />
+                        </div>
+                      ) : (
+                        <>
+                          {firmSizes?.map((size) => (
+                            <SelectItem value={String(size.id)}>{size.name}</SelectItem>
+                          ))}
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

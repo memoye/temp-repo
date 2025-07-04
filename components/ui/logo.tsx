@@ -20,10 +20,10 @@ export function Logo({ iconOnly, className, noColor }: LogoProps) {
           className="size-8 object-contain"
           src={
             !noColor
-              ? "/logo-icon.png"
+              ? "/assets/logo-icon.png"
               : resolvedTheme === "dark"
-                ? "/logo-icon-white.png"
-                : "/logo-icon-grayscale.png"
+                ? "/assets/logo-icon-white.png"
+                : "/assets/logo-icon-grayscale.png"
           }
           width={2763}
           height={2953}
@@ -33,7 +33,7 @@ export function Logo({ iconOnly, className, noColor }: LogoProps) {
       ) : (
         <Image
           className="h-12 w-28 object-contain"
-          src="/logo-full.png"
+          src="/assets/logo-full.png"
           width={1800}
           height={535}
           alt="Chronica"

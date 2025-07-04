@@ -132,4 +132,15 @@ export const authConfig = {
   },
 } satisfies NextAuthConfig;
 
+export async function completeLogout(idToken: string) {
+  const baseUrl = `${process.env.NEXT_PUBLIC_AUTH_URL}/connect/endsession`;
+  const logoutUrl = new URL(baseUrl);
+
+  logoutUrl.searchParams.set("post_logout_redirect_uri", process.env.NEXT_PUBLIC_APP_URL!);
+  logoutUrl.searchParams.set("id_token_hint", idToken);
+  logoutUrl.searchParams.set("client_id", process.env.NEXT_PUBLIC_AUTH_CLIENT_ID!);
+
+  window.location.href = logoutUrl.toString();
+}
+
 export const { handlers, signOut, signIn, auth } = NextAuth(authConfig);

@@ -1,11 +1,16 @@
-// import type { Client } from "@/types/clients";
-// import type { ApiResponse } from "@/types/common";
+import { api } from "@/lib/api";
+import { Client } from "@/types/clients";
+import { PaginatedRequestParams } from "@/types/common";
 
-// const base = `/clients/api/v${process.env.NEXT_PUBLIC_API_VERSION}`;
+const config = { service: "clients", requireAuth: true } as const;
 
-// export async function getClients(query?: Record<string, any>) {
-//   return callBackend<ApiResponse<Client[]>>(base, {
-//     query: query as any,
-//     resultMode: "onlySuccessWithException",
-//   });
-// }
+class ClientsService {
+  // Main operations
+  async getAll(params?: Partial<PaginatedRequestParams>) {
+    return api.get<(Client & { id: string; name: string; clientType: number })[]>("/", {
+      ...config,
+      params,
+    });
+  }
+}
+export const Clients = new ClientsService();

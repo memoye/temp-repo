@@ -11,6 +11,11 @@ import { CalendarAsideContent } from "./_components/calendar-aside-content";
 import Link from "next/link";
 import CreateEventDialog from "./_components/create-event-form-dialog";
 import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Calendar",
+};
 
 export default async function CalendarPage({
   searchParams,
@@ -22,7 +27,7 @@ export default async function CalendarPage({
   return (
     <div className="relative flex flex-col @7xl/main:flex-row">
       <Tabs defaultValue={search.tab ?? "firm"} className="w-full">
-        <PageWrapper className="flex-1 py-4">
+        <PageWrapper className="flex flex-1 flex-col py-4">
           <PageHeader
             pageActions={
               <div className="flex h-9 items-center gap-2">
@@ -80,7 +85,7 @@ export default async function CalendarPage({
             />
           </PageHeader>
 
-          <TabsContent value="firm">
+          <TabsContent className="flex-1" value="firm">
             <FirmCalendar />
           </TabsContent>
 

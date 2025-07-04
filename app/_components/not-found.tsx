@@ -7,9 +7,11 @@ export const NotFound = () => {
   return (
     <div className="flex h-full min-h-[calc(100dvh-10rem)] w-full place-items-center">
       <div className="mx-auto flex flex-col items-center text-center">
-        <h1 className="text-9xl font-black text-primary">404</h1>
+        <h1 title="Page not found" className="text-9xl font-black text-primary">
+          404 <span className="sr-only">Not Found</span>
+        </h1>
         <p className="text-foreground-light mt-4 mb-3">
-          The page you are looking does not exist or might have moved to a different address.
+          The page you are looking does not exist or might have been moved.
           <br /> Contact{" "}
           <Link
             className="font-medium text-primary hover:underline"

@@ -74,3 +74,5 @@ export const getUserSchema = (as?: string, message?: string) => {
     },
   );
 };
+
+export const requiredString = (message: string) => z.string().min(1, { message });

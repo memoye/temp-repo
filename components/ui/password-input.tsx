@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { AsteriskIcon, EyeIcon, EyeClosedIcon } from "lucide-react";
-import type { InputProps } from "./input";
 import { cn } from "@/lib/utils";
+import type { InputProps } from "./input";
 
 export function PasswordInput({ className, ...props }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +26,7 @@ export function PasswordInput({ className, ...props }: InputProps) {
           {Array(6)
             .fill(AsteriskIcon)
             .map((Item, idx) => (
-              <Item key={idx} />
+              <Item className="size-4" key={idx} />
             ))}
         </div>
       )}

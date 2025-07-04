@@ -7,61 +7,84 @@ import type {
   OnboardFirmValues,
   OnboardInvitedUserValues,
   User,
+  VerifyUserFormValues,
 } from "@/types/connect";
 
-export class ConnectService {
-  private readonly config = { service: "connect", requireAuth: false } as const;
+const config = { service: "connect", requireAuth: true } as const;
 
+class ConnectService {
   // Main
   async onboardFirm(data: OnboardFirmValues) {
+    console.log(config.service, "dddjskdsk");
     return api.post<{ userId: string; emailLink: string }>("/onboarding/onboard-firm", data, {
-      ...this.config,
+      ...config,
+      requireAuth: false,
     });
   }
 
-  async verifyUser(data: OnboardFirmValues) {
-    return api.post<Country[]>("/onboarding/verify-user", data, { ...this.config });
+  async verifyUser(data: VerifyUserFormValues) {
+    return api.post<Country[]>("/onboarding/verify-user", data, {
+      ...config,
+      requireAuth: false,
+    });
   }
 
   async resendVerificationEmail(data: { email: string }) {
-    return api.post("/onboarding/resend-email-link", data, { ...this.config });
+    return api.post("/onboarding/resend-email-link", data, {
+      ...config,
+      requireAuth: false,
+    });
   }
 
   async onboardInvitedUser(data: OnboardInvitedUserValues) {
-    return api.post("/onboarding/complete-user-invitation", data, { ...this.config });
+    return api.post("/onboarding/complete-user-invitation", data, {
+      ...config,
+      requireAuth: false,
+    });
   }
 
   async getFirmDetails() {
-    return api.post<Firm>("/law-firm/details", { ...this.config });
+    return api.post<Firm>("/law-firm/details", { ...config });
   }
 
   readonly users = {
     getAll: (params?: Partial<PaginatedRequestParams>) =>
-      api.get<User[]>("/users", { ...this.config, params }),
+      api.get<User[]>("/users", { ...config, params }),
 
     generateInviteLink: () =>
-      api.post<User[]>("/users/generate-invite-link", {}, { ...this.config }),
+      api.post<User[]>("/users/generate-invite-link", {}, { ...config }),
 
     invite: (data: InviteUserValues) =>
-      api.post<User[]>("/users/invite-user", data, { ...this.config }),
+      api.post<User[]>("/users/invite-user", data, { ...config }),
 
     resendInvite: (data: { email: string }) =>
-      api.post<User[]>("/users/resend-invite-link", data, { ...this.config }),
+      api.post<User[]>("/users/resend-invite-link", data, { ...config }),
   };
 
   readonly lookups = {
-    getCountries: () => api.get<Country[]>("/lookup/get-countries", { ...this.config }),
+    getCountries: () =>
+      api.get<Country[]>("/lookup/get-countries", { ...config, requireAuth: false }),
 
     getStates: (country: Country["code"]) =>
-      api.get<LookupItem[]>(`/lookup/${country}/get-states`, { ...this.config }),
+      api.get<LookupItem[]>(`/lookup/${country}/get-states`, {
+        ...config,
+        requireAuth: false,
+      }),
 
     getCities: (state: LookupItem["id"]) =>
-      api.get<LookupItem[]>(`/lookup/${state}/get-cities`, { ...this.config }),
+      api.get<LookupItem[]>(`/lookup/${state}/get-cities`, {
+        ...config,
+        requireAuth: false,
+      }),
 
     getPracticeAreas: () =>
-      api.get<LookupItem[]>("/lookup/get-practice-areas", { ...this.config }),
+      api.get<LookupItem[]>("/lookup/get-practice-areas", {
+        ...config,
+        requireAuth: false,
+      }),
 
-    getFirmSizes: () => api.get<LookupItem[]>("/lookup/get-firm-sizes", { ...this.config }),
+    getFirmSizes: () =>
+      api.get<LookupItem[]>("/lookup/get-firm-sizes", { ...config, requireAuth: false }),
   };
 }
-export const connect = new ConnectService();
+export const Connect = new ConnectService();

@@ -19,6 +19,8 @@ export type InviteUserValues = z.infer<typeof inviteUserSchema>;
 
 export type RoleFormValues = z.infer<typeof roleFormSchema>;
 
+export type VerifyUserFormValues = { password: string; code: string };
+
 export interface User {
   firstName: string;
   dialCode: string;

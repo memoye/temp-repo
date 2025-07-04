@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/app/_components/login-button";
-import { ArrowRightIcon, ShieldCheckIcon } from "lucide-react";
+import { ShieldCheckIcon } from "lucide-react";
 
 export default function ImprovedLoginPage() {
   return (

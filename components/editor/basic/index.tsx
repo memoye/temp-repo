@@ -32,6 +32,7 @@ interface EditorProps {
   hasError?: boolean;
   contentEditableClassName?: string;
   maxLength?: Nullable<number>;
+  hideToolbar?: boolean;
 }
 
 /**
@@ -47,6 +48,7 @@ export function BasicEditor({
   hasError,
   contentEditableClassName,
   maxLength,
+  hideToolbar,
 }: EditorProps) {
   return (
     <div
@@ -72,6 +74,7 @@ export function BasicEditor({
               hasError={hasError}
               placeholder={placeholder}
               maxLength={maxLength}
+              hideToolbar={hideToolbar}
             />
             <OnChangePlugin
               ignoreSelectionChange={true}

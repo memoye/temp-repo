@@ -19,6 +19,7 @@ import { PageHeader } from "@/app/_components/page-header";
 import { ChartBarInteractive } from "./_components/interactive-bar-chart";
 import { ChartPieDonutText } from "./_components/donut-pie-chart";
 import { ChartLineDefault } from "./_components/line-chart";
+import Image from "next/image";
 
 const quickStats = [
   { id: "cases", label: "Active Cases", value: 34, change: "+12%", trend: "up" },

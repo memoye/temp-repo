@@ -90,14 +90,17 @@ function ComboboxTag({
       data-slot="combobox-tag"
       className={cn(
         badgeVariants({ variant: "outline" }),
-        "group gap-1 pr-1.5 data-disabled:opacity-50",
+        "group gap-1 rounded border-border bg-background pr-1.5 data-disabled:opacity-50",
         className,
       )}
       {...props}
     >
       <Slottable>{children}</Slottable>
-      <ComboboxPrimitive.TagGroupItemRemove className="group-data-disabled:pointer-events-none">
-        <XIcon className="size-4" />
+      <ComboboxPrimitive.TagGroupItemRemove
+        type="button"
+        className="group-data-disabled:pointer-events-none"
+      >
+        <XIcon className="size-3" />
         <span className="sr-only">Remove</span>
       </ComboboxPrimitive.TagGroupItemRemove>
     </ComboboxPrimitive.TagGroupItem>
